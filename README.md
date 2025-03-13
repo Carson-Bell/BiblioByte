@@ -1,6 +1,6 @@
 # BiblioByte
 ### Web Programming Spring 2025 Group Project <br/> 
-Group Members: \
+Group Members: 
 - Rachel Mende
 - Jennifer Chen
 - Brianna Green
