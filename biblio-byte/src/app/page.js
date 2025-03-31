@@ -3,7 +3,63 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      {/* Fixed Header */}
+      <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center">
+        <div className="flex items-center gap-2">
+          <Image
+            src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg" // Replace with the path to your image
+            alt="Logo"
+            width={50}
+            height={50}
+          />
+          <a href="#home" className="text-3xl font-semibold hover:font-bold text-white">
+            BiblioByte
+          </a>
+        </div>
+        <div className="ml-8 flex-auto">
+          <input
+            type="text"
+            placeholder="Search for book"
+            className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
+          />
+        </div>
+        <div className="ml-auto flex gap-4">
+          <button
+            className="px-4 py-2 bg-zinc-300 text-black rounded-md hover:bg-zinc-900 hover:text-white focus:outline-none"
+          >
+            Login
+          </button>
+          <button
+            className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+          >
+            Sign Up
+          </button>
+        </div>
+      </header>
+
+      {/* Navigation Bar */}
+      <nav className="w-full bg-zinc-400 text-white py-2 px-4 fixed top-[64px] z-30 shadow-md">
+        <ul className="list-none grid grid-cols-3 gap-3 text-center">
+      
+          <li>
+            <a href="#info" className="hover:underline">
+              Info
+            </a>
+          </li>
+          <li>
+            <a href="#reviews" className="hover:underline">
+              Reviews
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:underline">
+              Find
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start mt-28">
         <Image
           className="dark:invert"
           src="/next.svg"
@@ -16,7 +72,7 @@ export default function Home() {
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
             <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
+              src/app/page.js
             </code>
             .
           </li>
