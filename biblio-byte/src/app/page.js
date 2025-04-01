@@ -1,46 +1,11 @@
 import Image from "next/image";
-
+import Card from "@/components/Card";
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      {/* Fixed Header */}
-      <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center">
-        <div className="flex items-center gap-2">
-          <Image
-            src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg" // Replace with the path to your image
-            alt="Logo"
-            width={50}
-            height={50}
-          />
-          <a href="#home" className="text-3xl font-semibold hover:font-bold text-white">
-            BiblioByte
-          </a>
-        </div>
-        <div className="ml-8 flex-auto">
-          <input
-            type="text"
-            placeholder="Search for book"
-            className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
-          />
-        </div>
-        <div className="ml-auto flex gap-4">
-          <button
-            className="px-4 py-2 bg-zinc-300 text-black rounded-md hover:bg-zinc-900 hover:text-white focus:outline-none"
-          >
-            Login
-          </button>
-          <button
-            className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
-          >
-            Sign Up
-          </button>
-        </div>
-      </header>
-
+    <div className="flex flex-col min-h-screen">
       {/* Navigation Bar */}
       <nav className="w-full bg-zinc-400 text-white py-2 px-4 fixed top-[64px] z-30 shadow-md">
         <ul className="list-none grid grid-cols-3 gap-3 text-center">
-      
           <li>
             <a href="#info" className="hover:underline">
               Info
@@ -59,100 +24,66 @@ export default function Home() {
         </ul>
       </nav>
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start mt-28">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+      <div className="w-full h-1 bg-white shadow-md"></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+      {/* Main Content */}
+      <main className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
+        {/* Image on the Left */}
+        <div className="flex-shrink-0">
+          <Image
+            src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg" // Replace with the path to your image
+            alt="Splash Image"
+            width={400}
+            height={300}
+            className="rounded-lg"
+          />
+        </div>
+        {/* Text on the Right */}
+        <div className="flex flex-col gap-4">
+          <h1 className="text-4xl font-bold text-gray-800">
+            Book Title
+          </h1>
+          <h3 className="text-xl font-semibold text-gray-800">
+            <span className= "text-4xl font-bold">4.5</span>/5
+          </h3>
+          <a>
+            <button className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none">
+              Add to List
+            </button>
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <p className="text-m text-gray-600">
+            This is a description of the book. It provides an overview of the content, themes, and
+            key points that the book covers. It can also include information about the author and
+            the significance of the book in its genre or field.
+          </p>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+ {/* Review Section */}
+  <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
+    <h2 className="text-3xl font-bold text-gray-800 mb-4">Reviews</h2>
+    <Card className="bg-white p-4 shadow-md w-full">
+      <div className="flex items-center gap-4">
+        <h3 className="text-3xl font-semibold text-black">4.5</h3>
+        <div>
+          <h2 className="text-lg font-bold text-gray-800">Heading</h2>
+          <p className="text-sm font-bold text-gray-700">  User</p>
+          <div>
+            <p className="text-sm text-gray-600">
+              This is a review of the book. It provides insights into the content, style, and
+              overall impression of the book. The review can also include comparisons to other
+              works and recommendations for potential readers.
+            </p>
+          </div>
+        </div>
+        
+      </div>
+    </Card>
+  </section>
+
+      {/* Footer */}
+      <footer className="w-full bg-gray-800 text-white py-4 flex items-center justify-center">
+        <p className="text-sm">© 2025 BiblioByte. All rights reserved.</p>
       </footer>
     </div>
   );
