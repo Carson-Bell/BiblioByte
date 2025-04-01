@@ -79,6 +79,54 @@ export default function Home() {
         
       </div>
     </Card>
+
+    <Card className="bg-white p-4 mt-4 shadow-md w-full">
+      <div className="flex items-center gap-4">
+        <h3 className="text-3xl font-semibold text-black">4.5</h3>
+        <div>
+          <h2 className="text-lg font-bold text-gray-800">Heading</h2>
+          <p className="text-sm font-bold text-gray-700">  User</p>
+          <div>
+            <p className="text-sm text-gray-600">
+              This is a review of the book. It provides insights into the content, style, and
+              overall impression of the book. The review can also include comparisons to other
+              works and recommendations for potential readers.
+            </p>
+          </div>
+        </div>
+        
+      </div>
+    </Card>
+  </section>
+
+
+  {/* Find Section */}
+  <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
+    <h2 className="text-3xl font-bold text-gray-800 mb-4">Finds</h2>
+    <Card className="bg-white p-4 shadow-md w-full">
+    
+        <div>
+          <h2 className="text-lg font-bold text-gray-800">Heading</h2>
+          <p className="text-sm font-bold text-gray-700">  User</p>
+          <div>
+            <p className="text-sm text-gray-600">
+            Here where I found the book.
+            </p>
+          </div>
+        </div>
+    </Card>
+
+    <Card className="bg-white p-4 mt-4 shadow-md w-full">
+        <div>
+          <h2 className="text-lg font-bold text-gray-800">Heading</h2>
+          <p className="text-sm font-bold text-gray-700">  User</p>
+          <div>
+            <p className="text-sm text-gray-600">
+              Here where I found the book.
+            </p>
+          </div>
+        </div>
+    </Card>
   </section>
 
       {/* Footer */}
