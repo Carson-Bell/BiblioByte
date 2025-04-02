@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Card from "@/components/Card";
+import connectMongoDB from "../../config/mongodb";
 export default function Home() {
+  connectMongoDB();
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation Bar */}
