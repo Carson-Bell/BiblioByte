@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Card from "@/components/Card";
-import connectMongoDB from "../../config/mongodb";
-import BookPageHeader from "../components/BookPageHeader.js";
+import connectMongoDB from "../../../../config/mongodb.js";
+import BookPageHeader from "../../../components/BookPageHeader.js";
 
 export default function Home() {
   connectMongoDB();

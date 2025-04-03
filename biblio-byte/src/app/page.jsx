@@ -1,4 +1,6 @@
-export default function splashpage() {
+// SPLASH PAGE
+
+export default function page() {
     return (
         <div style={{
             fontFamily: 'Arial, sans-serif',
