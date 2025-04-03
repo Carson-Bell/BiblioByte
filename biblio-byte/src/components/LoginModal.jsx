@@ -21,14 +21,41 @@ export default function LoginModal({show, onClose}) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-lg font-semibold mb-4 text-black">Login</h2>
-                <form className="flex flex-col gap-3">
+                <form
+                    className="flex flex-col gap-3"
+                    onSubmit={async (e) => {
+                        e.preventDefault();
+                        const email = e.target.email.value;
+                        const password = e.target.password.value;
+
+                        const res = await fetch('/api/login', {
+                            method: 'POST',
+                            body: JSON.stringify({email, password}),
+                        });
+
+                        if (res.ok) {
+                            alert('Login successful');
+                            onClose();
+                        } else {
+                            alert('Invalid login');
+                        }
+                    }}
+                >
                     <div>
                         <label className="text-black">Email</label>
-                        <input type="email" className="w-full border px-2 py-1 rounded text-black"/>
+                        <input
+                            name="email"
+                            type="email"
+                            className="w-full border px-2 py-1 rounded text-black"
+                        />
                     </div>
                     <div>
                         <label className="text-black">Password</label>
-                        <input type="password" className="w-full border px-2 py-1 rounded text-black"/>
+                        <input
+                            name="password"
+                            type="password"
+                            className="w-full border px-2 py-1 rounded text-black"
+                        />
                     </div>
                     <button
                         type="submit"
