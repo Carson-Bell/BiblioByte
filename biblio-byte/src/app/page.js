@@ -1,32 +1,14 @@
 import Image from "next/image";
 import Card from "@/components/Card";
 import connectMongoDB from "../../config/mongodb";
+import BookPageHeader from "../components/BookPageHeader.js";
+
 export default function Home() {
   connectMongoDB();
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation Bar */}
-      <nav className="w-full bg-zinc-400 text-white py-2 px-4 fixed top-[64px] z-30 shadow-md">
-        <ul className="list-none grid grid-cols-3 gap-3 text-center">
-          <li>
-            <a href="#info" className="hover:underline">
-              Info
-            </a>
-          </li>
-          <li>
-            <a href="#reviews" className="hover:underline">
-              Reviews
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:underline">
-              Find
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <div className="w-full h-1 bg-white shadow-md"></div>
+      <BookPageHeader />
 
       {/* Main Content */}
       <main className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
