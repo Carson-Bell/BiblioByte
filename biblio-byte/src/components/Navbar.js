@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import Image from "next/image";
 import LoginModal from "./LoginModal"
 
-export default function NavbarUnauth() {
+export default function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
 
     return (
