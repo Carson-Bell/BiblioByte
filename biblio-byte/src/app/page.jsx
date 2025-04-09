@@ -3,6 +3,7 @@
 // pages/index.js
 import Head from 'next/head';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -44,6 +45,12 @@ export default function Home() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={inputStyle}
                         />
+
+                        {/* Temporary button to navigate to book page */}
+                        <Link href="/search/123">
+                            <button>Go to book page</button>
+                        </Link>
+
                         <button type="submit" style={buttonStyle}>Search</button>
                     </form>
                 </div>
