@@ -109,7 +109,8 @@ const profilePictureStyle = {
     height: '200px',
     width: '200px',
     borderRadius: '50%',
-    margin: '20px'
+    margin: '20px',
+    borderColor: 'black'
 };
 
 const inputStyle = {
@@ -121,7 +122,7 @@ const inputStyle = {
 };
 
 const buttonStyle = {
-    width: '100%',
+    width: '50%',
     padding: '10px',
     marginTop: '10px',
     backgroundColor: '#007BFF',
