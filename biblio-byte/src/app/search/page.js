@@ -1,24 +1,26 @@
 import React from 'react';
 import Link from 'next/link'; // Import Next.js Link for navigation
+import Books from '../../components/Books'; // Adjust the import path as necessary
+import { link } from 'fs';
 
-const books = [
+export default function SearchPage(){
+  return (
+    <div style={styles.container}>
+      <h1>Book Search</h1>
+      <div style={styles.grid}>
+       <Books prop = {BOOKS_INIT}/>
+      </div>
+    </div>
+  );
+
+}
+
+const BOOKS_INIT = [
   {
-    title: 'Intro to React',
-    author: 'John Doe',
-    description: 'Book, book, book.',
-    link: 'intro-to-react', // Use dynamic id for the link
-  },
-  {
-    title: 'Advanced React',
-    author: 'Jane Smith',
-    description: 'Advanced concepts in React.',
-    link: 'advanced-react',
-  },
-  {
-    title: 'React and Redux',
-    author: 'Alice Johnson',
-    description: 'Managing state with Redux.',
-    link: 'react-and-redux',
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    description: 'A novel set in the 1920s that explores themes of decadence and excess.',
+    link: 'the-great-gatsby',
   },
 ];
 
@@ -32,24 +34,6 @@ const BookCard = ({ title, author, description, link }) => (
   </Link>
 );
 
-const SearchPage = () => {
-  return (
-    <div style={styles.container}>
-      <h1>Book Search</h1>
-      <div style={styles.grid}>
-        {books.map((book, index) => (
-          <BookCard
-            key={index}
-            title={book.title}
-            author={book.author}
-            description={book.description}
-            link={book.link} // Pass the dynamic id to the BookCard
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const styles = {
   container: {
@@ -74,5 +58,3 @@ const styles = {
     transition: 'transform 0.2s',
   },
 };
-
-export default SearchPage;
