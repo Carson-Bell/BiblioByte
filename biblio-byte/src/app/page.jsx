@@ -4,15 +4,18 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
 
+    const router = useRouter();
+
     const handleSearch = (event) => {
         event.preventDefault();
-        console.log(`Searching for ${searchType}: ${searchTerm}`);
-        // Add your search logic or redirect here
+        if (!searchTerm) return;
+        router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
     };
 
     return (
