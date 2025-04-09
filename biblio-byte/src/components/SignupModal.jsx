@@ -28,10 +28,11 @@ export default function SignupModal({show, onClose}) {
                         const name = e.target.name.value;
                         const email = e.target.email.value;
                         const password = e.target.password.value;
+                        const university = e.target.university.value;
 
                         const res = await fetch('/api/signup', {
                             method: 'POST',
-                            body: JSON.stringify({name, email, password}),
+                            body: JSON.stringify({name, email, password, university}),
                         });
 
                         if (res.ok) {
@@ -63,6 +64,14 @@ export default function SignupModal({show, onClose}) {
                         <input
                             name="password"
                             type="password"
+                            className="w-full border px-2 py-1 rounded text-black"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-black">University</label>
+                        <input
+                            name="university"
+                            type="university"
                             className="w-full border px-2 py-1 rounded text-black"
                         />
                     </div>

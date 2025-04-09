@@ -1,7 +1,7 @@
 import Book from "../../../models/Book.js";
 import connectMongoDB from "../../../../config/mongodb.ts";
 
-export async function POST(req) {
+export async function POST(req) { //Used for the search bar on the home page
     const { searchType, searchTerm } = await req.json();
 
     await connectMongoDB();
@@ -12,7 +12,7 @@ export async function POST(req) {
         if (searchType === 'Textbook') {
             query.title = { $regex: searchTerm, $options: 'i' }; // Case-insensitive search
         } else if (searchType === 'Class') {
-            query.class = { $regex: searchTerm, $options: 'i' };
+            query.className = { $regex: searchTerm, $options: 'i' };
         } else if (searchType === 'School') {
             query.school = { $regex: searchTerm, $options: 'i' };
         }

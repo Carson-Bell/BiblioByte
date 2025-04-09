@@ -2,7 +2,7 @@ import User from "../../../models/User.js";
 import connectMongoDB from "../../../../config/mongodb.ts";
 
 export async function POST(req) {
-    const { name, email, password } = await req.json();
+    const { name, email, password, university } = await req.json();
 
     await connectMongoDB();
 
@@ -14,7 +14,7 @@ export async function POST(req) {
         });
     }
 
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ name, email, password, university });
     await newUser.save();
 
     return new Response(JSON.stringify({ message: "User created successfully" }), {

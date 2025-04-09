@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         trim: true,
     },
+    university: {
+      type: String,
+      required: true,
+      trim: true,
+  },
 });
 
 userSchema.pre('save', async function(next) {
