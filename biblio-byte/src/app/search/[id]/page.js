@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Card from "@/components/Card";
-import connectMongoDB from "../../../../config/mongodb.js";
+import connectMongoDB from "../../../../config/mongodb.ts";
 import BookPageHeader from "../../../components/BookPageHeader.js";
 
 export default function Home() {
