@@ -2,9 +2,11 @@
 import React, {useState} from "react";
 import Image from "next/image";
 import LoginModal from "./LoginModal"
+import SignupModal from "./SignupModal"
 
 export default function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
 
     return (
         <>
@@ -35,6 +37,7 @@ export default function Navbar() {
                         Login
                     </button>
                     <button
+                        onClick={() => setShowSignup(true)}
                         className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                     >
                         Sign Up
@@ -42,7 +45,8 @@ export default function Navbar() {
                 </div>
             </header>
 
-            <LoginModal show={showLogin} onClose={() => setShowLogin(false)}/>
+            <LoginModal show={showLogin} onClose={() => setShowLogin(false)}/>;
+            <SignupModal show={showSignup} onClose={() => setShowSignup(false)}/>
         </>
     );
 }

@@ -10,7 +10,15 @@ export async function POST(req) {
 
     const user = await User.findOne({ email });
 
-    if (!user || user.password !== password) {
+    
+    if (!user) {
+        return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+            status: 401,
+        });
+    }  
+    
+    const isValidPassword = await user.isValidPassword(password);
+    if (!isValidPassword) {
         return new Response(JSON.stringify({ error: "Invalid credentials" }), {
             status: 401,
         });
