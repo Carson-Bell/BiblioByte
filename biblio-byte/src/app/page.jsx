@@ -5,14 +5,36 @@ import Head from 'next/head';
 import { useState } from 'react';
 import Link from 'next/link';
 
+
+
 export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
 
-    const handleSearch = (event) => {
+    const handleSearch = async (event) => {
         event.preventDefault();
-        console.log(`Searching for ${searchType}: ${searchTerm}`);
-        // Add your search logic or redirect here
+        try {
+            const res = await fetch('/api/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    searchType,
+                    searchTerm,
+                }),
+            });
+    
+            if (res.ok) {
+                const data = await res.json();
+                console.log('Search results:', data);
+            } else {
+                console.error('Search failed');
+            }
+        } catch (error) {
+            console.error('Error during search:', error);
+        }
+   
     };
 
     return (
@@ -37,6 +59,8 @@ export default function Home() {
                             <option value="Textbook">Textbook</option>
                             <option value="Class">Class</option>
                             <option value="School">School</option>
+                            
+
                         </select>
                         <input
                             type="text"
