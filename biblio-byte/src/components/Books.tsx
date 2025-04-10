@@ -1,5 +1,6 @@
-"use client";
-import { useState } from 'react';
+import Card from './Card'; // Adjust the import path as necessary
+import Link from 'next/link'; // Import Next.js Link for navigation
+import Book from './Book'; // Adjust the import path as necessary
 
 type Book = {
     id: number;
@@ -9,37 +10,18 @@ type Book = {
     link: string;
 };
 
-type BooksProps = {
-    books: Book[];
+type BookProps = {
+    prop: Book[];
 };
 
-function Books(props: BooksProps) {
-    const { books } = props;
-    const [showMore, setShowMore] = useState(false);
-
+function Books({prop}: BookProps) {
     return (
-        <div className="flex flex-col gap-4">
-            {books.map((book) => (
-                <Card key={book.id} title={book.title} author={book.author} description={book.description} link={book.link} />
+        <div>
+            {prop.map((book) => (
+                <Card key={book.id} className ="book-card">
+                    <Book book={book}/>
+                </Card>
             ))}
-        </div>
-    );
-}
-
-type CardProps = {
-    title: string;
-    author: string;
-    description: string;
-    link: string;
-};
-
-function Card({ title, author, description, link }: CardProps) {
-    return (
-        <div className="card">
-            <h2>{title}</h2>
-            <h3>{author}</h3>
-            <p>{description}</p>
-            <a href={link}>Read more</a>
         </div>
     );
 }
