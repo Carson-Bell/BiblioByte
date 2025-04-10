@@ -31,6 +31,7 @@ export default function LoginModal({show, onClose}) {
                         const res = await fetch('/api/login', {
                             method: 'POST',
                             body: JSON.stringify({email, password}),
+                            credentials: 'include', // Include cookies in the request
                         });
 
                         if (res.ok) {
