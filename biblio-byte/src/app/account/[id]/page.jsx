@@ -9,11 +9,18 @@ export default function Page() {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [school, setSchool] = useState('');
     const [password, setPassword] = useState('');
+    const [profilePic, setProfilePic] = useState('https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg');
 
     const handleUpdate = (event) => {
         event.preventDefault();
         // Implement update logic here
         console.log(`Profile updated for ${email}`);
+    };
+
+    const handleImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setProfilePic(URL.createObjectURL(event.target.files[0]));
+        }
     };
 
     return (
@@ -23,9 +30,9 @@ export default function Page() {
             </Head>
             <div style={pageStyle}>
                 <div style={cardStyle} className="card1 welcome">
-                    <div style={profilePictureStyle}></div>
+                    <div style={{ ...profilePictureStyle }}></div>
                     <h2>Welcome back!</h2>
-                    <button style={buttonStyle}>Upload Photo</button>
+                    <input type="file" onChange={handleImageChange} style={inputFileStyle} />
                     <p><strong>First Last</strong></p>
                     <p>school</p>
                     <button style={buttonStyle}>Logout</button>
@@ -104,7 +111,7 @@ const card2Style = {
 };
 
 const profilePictureStyle = {
-    background: `url('https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg')`,
+    background: `url(${profilePic})`,
     backgroundSize: 'cover',
     height: '200px',
     width: '200px',
@@ -113,12 +120,16 @@ const profilePictureStyle = {
     borderColor: 'black'
 };
 
-const inputStyle = {
-    width: '75%',
+const inputFileStyle = {
+    width: '50%',
     padding: '10px',
     marginTop: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '5px'
+    backgroundColor: '#007BFF',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    display: 'block'
 };
 
 const buttonStyle = {
@@ -130,4 +141,12 @@ const buttonStyle = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer'
+};
+
+const inputStyle = {
+    width: '50%',
+    padding: '10px',
+    marginTop: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '5px'
 };
