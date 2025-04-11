@@ -1,4 +1,4 @@
-"user client";
+"use client";
 import {useState} from 'react'; // Import useState for state management
 import Link from 'next/link'; // Import Next.js Link for navigation
 import Books from '../../components/Books'; // Adjust the import path as necessary
