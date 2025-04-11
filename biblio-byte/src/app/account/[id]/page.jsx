@@ -30,7 +30,7 @@ export default function Page() {
             </Head>
             <div style={pageStyle}>
                 <div style={cardStyle} className="card1 welcome">
-                    <div style={{ ...profilePictureStyle }}></div>
+                    <div style={{ ...profilePictureStyle, background: `url(${profilePic})` }}></div>
                     <h2>Welcome back!</h2>
                     <input type="file" onChange={handleImageChange} style={inputFileStyle} />
                     <p><strong>First Last</strong></p>
@@ -111,7 +111,6 @@ const card2Style = {
 };
 
 const profilePictureStyle = {
-    background: `url(${profilePic})`,
     backgroundSize: 'cover',
     height: '200px',
     width: '200px',
