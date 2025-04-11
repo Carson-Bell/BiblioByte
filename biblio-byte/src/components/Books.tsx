@@ -16,7 +16,11 @@ type BookProps = {
 
 function Books({prop}: BookProps) {
     return (
-        <div>
+        <div style={{
+            backgroundColor: 'rgb(255,255,255,.8)', // White background for each book
+            padding: '5px',
+            borderRadius: '10px',
+          }}>
             {prop.map((book) => (
                 <Card key={book.id} className ="book-card">
                     <Book book={book}/>

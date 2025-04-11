@@ -1,20 +1,17 @@
 "use client";
-import { useState } from 'react'; // Import useState for state management
-import Link from 'next/link'; // Import Next.js Link for navigation
-import Books from '../../components/Books'; // Adjust the import path as necessary
-import AddBook from '@/components/AddBook';
-// Define the type for a single book
+import { useState } from 'react';
+import Books from '../../components/Books';
+import Link from 'next/link';
+
 type Book = {
-  id: number; // Unique identifier for each book
+  id: number;
   title: string;
   author: string;
   description: string;
   link: string;
 };
 
-// Define the initial list of books
 export default function Home() {
-
   const [books, setBooks] = useState<Book[]>([
     {
       id: 1,
@@ -25,22 +22,51 @@ export default function Home() {
     },
   ]);
 
-  //func to add new book
-  const addBook = (newBook: Omit<Book, 'id'>) => {
-    setBooks((prevBooks) => [
-      ...prevBooks,
-      {id: prevBooks.length + 1, ...newBook},
-      ]);
-  };
-
-  return ( 
-    <div>   
-
-      <div className="flex flex-col items-center justify-center p-3 bg-gray-100" style={{ marginTop: '80px' }}>
-        <h1 className="text-4xl font-bold mb-6">Search Results:</h1>
-        <Books prop={books}/>
+  return (
+    <div
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 1,
+        }}
+      ></div>
+      <div
+        className="flex flex-col items-center justify-center p-3"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          marginTop: '80px',
+        }}
+      >
+        <h1 className="text-4xl font-bold text-white mb-6">Search Results:</h1>
+        <Books prop={books} />
+        <Link href="/create-book">
+          <button
+            style={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              backgroundColor: '#022f2e',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}
+          >
+            Add a New Book
+          </button>
+        </Link>
       </div>
-      <AddBook onAddBook={addBook} />
     </div>
   );
 }
