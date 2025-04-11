@@ -70,13 +70,14 @@ export default function Home() {
                             style={inputStyle}
                         />
 
-                        {/* Temporary button to navigate to book page */}
-                        <Link href="/search/123">
-                            <button>Go to book page</button>
-                        </Link>
-
                         <button type="submit" style={buttonStyle}>Search</button>
                     </form>
+
+                    {/* Temporary button to navigate to book page */}
+                    <Link href="/search/123">
+                        <button>Go to book page</button>
+                    </Link>
+
                 </div>
             </div>
         </>
