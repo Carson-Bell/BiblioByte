@@ -30,14 +30,26 @@ export default function Page() {
             </Head>
             <div style={pageStyle}>
                 <div style={cardStyle} className="card1 welcome">
-                    <div style={{ ...profilePictureStyle, background: `url(${profilePic})` }}></div>
+                    {/* this was previously <div> and i made it <img>*/}
+                    <img
+                        src={profilePic}
+                        alt="Profile"
+                        style={{
+                            height: '200px',
+                            width: '200px',
+                            objectFit: 'cover',
+                            borderRadius: '50%',
+                            margin: '20px',
+                            border: '2px solid black'
+                        }}
+                    />
                     <h2>Welcome back!</h2>
-                    <input type="file" onChange={handleImageChange} style={inputFileStyle} />
+                    <input type="file" onChange={handleImageChange} style={inputFileStyle}/>
                     <p><strong>First Last</strong></p>
                     <p>school</p>
                     <button style={buttonStyle}>Logout</button>
                 </div>
-                <div style={{ ...cardStyle, ...card2Style }} className="card2 edit-profile">
+                <div style={{...cardStyle, ...card2Style}} className="card2 edit-profile">
                     <h2>Edit Profile</h2>
                     <input
                         type="text"
@@ -108,15 +120,6 @@ const card2Style = {
     width: '500px',
     height: '420px',
     alignItems: 'center',
-};
-
-const profilePictureStyle = {
-    backgroundSize: 'cover',
-    height: '200px',
-    width: '200px',
-    borderRadius: '50%',
-    margin: '20px',
-    borderColor: 'black'
 };
 
 const inputFileStyle = {
