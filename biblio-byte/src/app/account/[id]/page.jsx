@@ -44,7 +44,10 @@ export default function Page() {
                         }}
                     />
                     <h2>Welcome back!</h2>
-                    <input type="file" onChange={handleImageChange} style={inputFileStyle}/>
+                    <input type="file" onChange={handleImageChange} style={{ display: 'none' }} />
+                    <button style={buttonStyle} onClick={() => document.querySelector('input[type="file"]').click()}>
+                        Upload Image
+                    </button>
                     <p><strong>First Last</strong></p>
                     <p>school</p>
                     <button style={buttonStyle}>Logout</button>
@@ -146,7 +149,7 @@ const buttonStyle = {
 };
 
 const inputStyle = {
-    width: '50%',
+    width: '75%',
     padding: '10px',
     marginTop: '10px',
     border: '1px solid #ccc',
