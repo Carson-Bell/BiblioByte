@@ -1,7 +1,7 @@
 
 import './globals.css';
 import Image from 'next/image';
-import NavbarUnauth from "../components/NavbarUnauth.js";
+import Navbar from "../components/Navbar";
 export const metadata = {
   title: 'BiblioByte',
   description: 'A book search and review platform',
@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="antialiased">
         {/* Header Component */}
-        <NavbarUnauth />
+        <Navbar />
 
         {/* Main Content */}
         <div>{children}</div>

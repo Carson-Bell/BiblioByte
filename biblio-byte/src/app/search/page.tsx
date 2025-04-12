@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Books from '../../components/Books';
 import Link from 'next/link';
 
@@ -12,15 +12,24 @@ type Book = {
 };
 
 export default function Home() {
-  const [books, setBooks] = useState<Book[]>([
-    {
-      id: 1,
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-      description: 'A novel set in the 1920s that explores themes of decadence and excess.',
-      link: 'the-great-gatsby',
-    },
-  ]);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      const fetchBooks =  async () => {
+          try {
+              const res = await fetch ('/api/books');
+              const data = await res.json();
+              setBooks(data);
+          } catch (error){
+              console.error('Failed to fetch books', error);
+          } finally {
+              setLoading(false);
+          }
+      };
+
+      fetchBooks();
+  }, []);
 
   return (
     <div
@@ -50,7 +59,15 @@ export default function Home() {
         }}
       >
         <h1 className="text-4xl font-bold text-white mb-6">Search Results:</h1>
-        <Books prop={books} />
+
+          {loading ? (
+              <p className="text-white">Loading...</p>
+          ) : books.length > 0 ? (
+              <Books prop={books} />
+          ) : (
+              <p className="text-white">No books found.</p>
+          )}
+
         <Link href="/create-book">
           <button
             style={{
