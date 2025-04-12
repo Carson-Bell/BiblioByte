@@ -1,7 +1,7 @@
-"use client"; // Ensure this is at the top for client-side React features in Next.js
+"use client";
 import React, { useState } from 'react';
 
-// Review component to display individual reviews
+
 function Review({ score, title, content, user, school }) {
     return (
         <div style={reviewCardStyle}>
@@ -15,7 +15,7 @@ function Review({ score, title, content, user, school }) {
     );
 }
 
-// Listing component to display individual listings
+
 function Listing({ title, description, views }) {
     return (
         <div style={listingCardStyle}>
@@ -26,7 +26,7 @@ function Listing({ title, description, views }) {
     );
 }
 
-// Main component that aggregates reviews and listings on the page
+
 function Page() {
     const [reviews, setReviews] = useState([
         { id: 1, score: 4.5, title: "Very Helpful", content: "Alice - University A", user: "Alice", school: "University A" },
@@ -69,7 +69,7 @@ function Page() {
     );
 }
 
-// CSS-in-JS styles for the components
+
 const pageStyle = {
     height: '100vh',
     alignItems: 'center',
