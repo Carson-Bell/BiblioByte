@@ -1,83 +1,108 @@
 "use client";
-import { useState } from 'react';
-import Card from './Card'; 
-import Button from './Button'; // Adjust the import path as necessary
+import React, { useState } from 'react';
+import BookPreviewModal from "@/components/BookPreviewModal";
+
+
+type Book = {
+  title: string;
+  author: string;
+  description: string;
+  link: string;
+  thumbnail?: string;
+};
 
 type AddBookProps = {
-  onAddBook: (book: { title: string; author: string; description: string; link: string }) => void;
+  onAddBook: (book: Book) => void;
 };
 
 export default function AddBook({ onAddBook }: AddBookProps) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
+  const [link, setLink] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [previewBook, setPreviewBook] = useState<Book | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Generate a link based on the title
-    const link = title.toLowerCase().replace(/\s+/g, '-');
+    const query = `${title} ${author}`;
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
 
-    // Call the onAddBook function with the new book data
-    onAddBook({ title, author, description, link });
+    if (data.items && data.items.length > 0) {
+      const volume = data.items[0].volumeInfo;
+      const matchedBook: Book = {
+        title: volume.title || title,
+        author: (volume.authors?.[0]) || author,
+        description: volume.description || description,
+        link: volume.infoLink || link,
+        thumbnail: volume.imageLinks?.thumbnail || '',
+      };
 
-    // Clear the form fields
-    setTitle('');
-    setAuthor('');
-    setDescription('');
+      setPreviewBook(matchedBook);
+      setModalOpen(true);
+    } else {
+      // for no match found
+      onAddBook({ title, author, description, link });
+    }
   };
 
+  const handleConfirm = () => {
+    if (previewBook) {
+      onAddBook(previewBook);
+    }
+
+    setModalOpen(false);
+  }
+
   return (
-    <div className="flex justify-center items-center min-h-screen py-6">
-      <Card
-        className="w-full max-w-4xl p-8 bg-white shadow-lg rounded-lg"
-      >
-        <h1 className="text-5xl font-bold mb-8 text-center">Add Book</h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="title" className="block font-semibold mb-2">
-              Title
-            </label>
-            <input
-              className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
-              name="title"
+      <>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
               type="text"
-              placeholder="Enter textbook name"
+              placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="author" className="block font-semibold mb-2">
-              Author
-            </label>
-            <input
-              className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
-              name="author"
+              required
+              className="p-2 border rounded"
+          />
+          <input
               type="text"
-              placeholder="Enter textbook author"
+              placeholder="Author"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="description" className="block font-semibold mb-2">
-              Description
-            </label>
-            <textarea
-              className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
-              name="description"
-              placeholder="What's the book about?"
+              required
+              className="p-2 border rounded"
+          />
+          <textarea
+              placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={6}
-            ></textarea>
-          </div>
-          <Button type="submit" className="w-full py-4 text-lg font-bold bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Add Book
-          </Button>
+              className="p-2 border rounded"
+          />
+          <input
+              type="url"
+              placeholder="Link (optional)"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              className="p-2 border rounded"
+          />
+          <button
+              type="submit"
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+          >
+            Submit
+          </button>
         </form>
-      </Card>
-    </div>
+
+        <BookPreviewModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            onConfirm={handleConfirm}
+            book={previewBook}
+        />
+      </>
   );
 }
