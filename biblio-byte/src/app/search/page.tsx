@@ -2,14 +2,7 @@
 import { useState, useEffect } from 'react';
 import Books from '../../components/Books';
 import Link from 'next/link';
-
-type Book = {
-  id: number;
-  title: string;
-  author: string;
-  description: string;
-  link: string;
-};
+import { Book } from '../../types/Book';
 
 export default function Home() {
   const [books, setBooks] = useState<Book[]>([]);

@@ -1,14 +1,6 @@
 import Card from './Card'; // Adjust the import path as necessary
-import Link from 'next/link'; // Import Next.js Link for navigation
-import Book from './Book'; // Adjust the import path as necessary
-
-type Book = {
-    _id: number;
-    title: string;
-    author: string;
-    description: string;
-    link: string;
-};
+import BookComponent from './Book'; // Adjust the import path as necessary
+import { Book } from '../types/Book';
 
 type BookProps = {
     prop: Book[];
@@ -38,7 +30,7 @@ function Books({prop}: BookProps) {
                     }}
                 >
                     <Card className="book-card">
-                        <Book book={book}/>
+                        <BookComponent book={book}/>
                     </Card>
                 </div>
             ))}

@@ -1,14 +1,10 @@
 import Link from 'next/link';
 import Card from './Card';
+import { Book as BookType } from '../types/Book';
 
-interface BookProps {
-  book: {
-    title: string;
-    author: string;
-    description: string;
-    link: string;
-  };
-};
+type BookProps = {
+    book: BookType;
+}
 
 export default function Book({ book }: BookProps) {
     return (
