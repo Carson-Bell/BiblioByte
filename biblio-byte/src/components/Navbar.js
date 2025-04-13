@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
+import Link from 'next/link';
 
 export default function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
@@ -49,17 +50,17 @@ export default function Navbar() {
     return (
         <>
             <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center">
-                <div className="flex items-center gap-2">
+                <Link href="/" className="flex items-center gap-2">
                     <Image
                         src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg"
                         alt="Logo"
                         width={50}
                         height={50}
                     />
-                    <a href="#home" className="text-3xl font-semibold hover:font-bold text-white">
+                    <span className="text-3xl font-semibold hover:font-bold text-white">
                         BiblioByte
-                    </a>
-                </div>
+                    </span>
+                </Link>
                 <div className="ml-8 flex-auto">
                     <input
                         type="text"
