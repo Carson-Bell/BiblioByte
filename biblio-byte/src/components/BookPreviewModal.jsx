@@ -10,7 +10,7 @@ export default function BookPreviewModal({ isOpen, onClose, onConfirm, book }) {
             onClick={onClose}
         >
             <div
-                className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md"
+                className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mt-18"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="text-xl font-bold mb-4 text-center">Is this your book?</h2>

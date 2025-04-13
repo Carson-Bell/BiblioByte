@@ -49,12 +49,27 @@ export default function AddBook({ onAddBook }: AddBookProps) {
     }
   };
 
-  const handleConfirm = () => {
-    if (previewBook) {
-      onAddBook(previewBook);
-    }
+  const handleConfirm = async () => {
+    if (!previewBook) return;
 
-    setModalOpen(false);
+    try {
+      const res = await fetch('/api/books/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(previewBook),
+      });
+
+      if (!res.ok) throw new Error('Failed to add book');
+
+      console.log('Book added to collection');
+      onAddBook(previewBook); // optional, for any local updates
+    } catch (err) {
+      console.error('Error adding book:', err);
+    } finally {
+      setModalOpen(false);
+    }
   }
 
   return (

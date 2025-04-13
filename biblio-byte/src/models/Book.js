@@ -35,12 +35,12 @@ const bookSchema = new mongoose.Schema({
     },
     className: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     school: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     reviews: [reviewSchema], // Array of reviews
