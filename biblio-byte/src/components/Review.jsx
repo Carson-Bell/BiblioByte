@@ -1,93 +1,98 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function Review({ bookId, onReviewSubmitted }) {
-    const [review, setReview] = useState({
-        title: '',
-        content: '',
-        rating: ''
+export default function Review({ show, onClose }) {
+    // State for form data
+    const [formData, setFormData] = useState({
+        description: '',
+        rating: 1
     });
 
-    const handleInputChange = (e) => {
+    useEffect(() => {
+        // Lock body scroll when the modal is visible
+        document.body.style.overflow = show ? 'hidden' : 'auto';
+    }, [show]);
+
+    if (!show) return null;
+
+    // Handle input changes
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setReview(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Review details:", formData);
+
+        // Placeholder for actual API call
+        alert('Review submitted!');
+        onClose(); // Close the modal after submission
     };
 
     return (
-        <div className="review-card" style={cardStyle}>
-            <h3>Add a Review</h3>
-            <form onSubmit={handleSubmit} style={formStyle}>
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Review Title"
-                    value={review.title}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                    required
-                />
-                <textarea
-                    name="content"
-                    placeholder="Review Content"
-                    value={review.content}
-                    onChange={handleInputChange}
-                    style={textareaStyle}
-                    required
-                />
-                <input
-                    type="number"
-                    name="rating"
-                    placeholder="Rating (1-5)"
-                    value={review.rating}
-                    onChange={handleInputChange}
-                    style={inputStyle}
-                    min="1"
-                    max="5"
-                    required
-                />
-                <button type="submit" style={buttonStyle}>Submit Review</button>
-            </form>
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20"
+            onClick={onClose}
+        >
+            <div
+                className="bg-white p-6 rounded-md shadow-lg min-w-[300px] relative"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <h2 className="text-lg font-semibold mb-4 text-black">Add a Review</h2>
+                <form
+                    className="flex flex-col gap-3"
+                    onSubmit={handleSubmit}
+                >
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Description
+                        </label>
+                        <textarea
+                            className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
+                            name="description"
+                            placeholder="What's your review?"
+                            value={formData.description}
+                            onChange={handleChange}
+                            rows={6}
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Rating
+                        </label>
+                        <select
+                            name="rating"
+                            className="w-full border px-2 py-2 rounded text-black"
+                            value={formData.rating}
+                            onChange={handleChange}
+                        >
+                            {[...Array(10).keys()].map(x => (
+                                <option key={x} value={(x + 1) * 0.5}>
+                                    {(x + 1) * 0.5}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                    >
+                        Submit
+                    </button>
+                </form>
+                <button
+                    onClick={onClose}
+                    className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                >
+                    ✕
+                </button>
+            </div>
         </div>
     );
 }
-
-// Styles
-const cardStyle = {
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-    padding: '20px',
-    borderRadius: '8px',
-    backgroundColor: '#fff',
-    margin: '20px 0'
-};
-
-const formStyle = {
-    display: 'flex',
-    flexDirection: 'column'
-};
-
-const inputStyle = {
-    marginBottom: '10px',
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc'
-};
-
-const textareaStyle = {
-    minHeight: '100px',
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    marginBottom: '10px'
-};
-
-const buttonStyle = {
-    padding: '10px 15px',
-    color: '#fff',
-    backgroundColor: '#007BFF',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer'
-};
-
-export default Review;
