@@ -1,6 +1,7 @@
-import './globals.css';
-import Navbar from "../components/Navbar.js";
 
+import './globals.css';
+import Image from 'next/image';
+import Navbar from "../components/Navbar";
 export const metadata = {
   title: 'BiblioByte',
   description: 'A book search and review platform',
