@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 
 export default function Review({ show, onClose }) {
-    // State for form data
     const [formData, setFormData] = useState({
         description: '',
         rating: 1
@@ -16,7 +15,6 @@ export default function Review({ show, onClose }) {
 
     if (!show) return null;
 
-    // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -25,14 +23,13 @@ export default function Review({ show, onClose }) {
         }));
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Review details:", formData);
 
-        // Placeholder for actual API call
+
         alert('Review submitted!');
-        onClose(); // Close the modal after submission
+        onClose();
     };
 
     return (
