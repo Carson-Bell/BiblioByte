@@ -64,7 +64,6 @@ export default function AddBook({ onAddBook }: AddBookProps) {
       if (!res.ok) throw new Error('Failed to add book');
 
       console.log('Book added to collection');
-      onAddBook(previewBook); // optional, for any local updates
     } catch (err) {
       console.error('Error adding book:', err);
     } finally {
