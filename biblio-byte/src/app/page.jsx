@@ -4,37 +4,20 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 
 export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
+    const router = useRouter();
 
     const handleSearch = async (event) => {
         event.preventDefault();
-        try {
-            const res = await fetch('/api/books', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    searchType,
-                    searchTerm,
-                }),
-            });
-    
-            if (res.ok) {
-                const data = await res.json();
-                console.log('Search results:', data);
-            } else {
-                console.error('Search failed');
-            }
-        } catch (error) {
-            console.error('Error during search:', error);
-        }
-   
+        if (!searchTerm.trim()) return;
+
+        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
     };
 
     return (

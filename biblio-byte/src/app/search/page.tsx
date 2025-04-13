@@ -3,26 +3,39 @@ import { useState, useEffect } from 'react';
 import Books from '../../components/Books';
 import Link from 'next/link';
 import { Book } from '../../types/Book';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get('term');
+  const searchType = searchParams.get('type') || 'Textbook';
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
       const fetchBooks =  async () => {
+          if (!searchTerm) return;
+
           try {
-              const res = await fetch ('/api/books');
+              const res = await fetch('/api/books', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ searchType, searchTerm }),
+              });
+
               const data = await res.json();
               setBooks(data);
-          } catch (error){
-              console.error('Failed to fetch books', error);
+          } catch (error) {
+              console.error('Failed to fetch books:', error);
           } finally {
               setLoading(false);
           }
       };
 
       fetchBooks();
-  }, []);
+  }, [searchTerm, searchType]);
 
   return (
     <div
