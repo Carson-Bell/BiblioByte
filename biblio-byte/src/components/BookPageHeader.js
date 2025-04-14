@@ -5,7 +5,8 @@ import React from "react";
 export default function BookPageHeader() {
     return (
         <>
-            <nav className="w-full bg-zinc-400 text-white py-2 px-4 fixed top-[64px] z-30 shadow-md">
+            <nav className="w-full text-white py-2 px-4 fixed top-[64px] z-30 shadow-md"
+             style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
                 <ul className="list-none grid grid-cols-3 gap-3 text-center">
                     <li>
                         <a href="#info" className="hover:underline">

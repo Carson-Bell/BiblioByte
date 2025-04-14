@@ -89,6 +89,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
               onChange={(e) => setAuthor(e.target.value)}
               required
               className="p-2 border rounded"
+              
           />
           <textarea
               placeholder="Description"
@@ -105,7 +106,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
           />
           <button
               type="submit"
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              className="bg-teal-800 text-white py-2 px-4 rounded hover:bg-teal-900"
           >
             Submit
           </button>

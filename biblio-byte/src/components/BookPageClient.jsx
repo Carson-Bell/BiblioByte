@@ -39,7 +39,8 @@ export default function BookPageClient({ book }) {
             <span className= "text-4xl font-bold">4.5</span>/5
           </h3>
           <a>
-            <button className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none">
+            <button className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+            style={{ backgroundColor: 'rgba(11,79,74, 1)'}}>
               Add to List
             </button>
           </a>
@@ -51,10 +52,12 @@ export default function BookPageClient({ book }) {
 
  {/* Review Section */}
   <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
-    <h2 className="text-3xl font-bold text-gray-800 mb-4">Reviews</h2>
+    <h2 className="text-3xl font-bold text-white mb-2">Reviews</h2>
     <button
         onClick={() => setShowReview(true)}
         className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+        style={{ backgroundColor: 'rgba(11,79,74, 1)' , marginBottom: '.5rem'
+        }}
     >
       Add Review
     </button>
@@ -98,10 +101,12 @@ export default function BookPageClient({ book }) {
 
   {/* Find Section */}
   <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
-    <h2 className="text-3xl font-bold text-gray-800 mb-4">Finds</h2>
+    <h2 className="text-3xl font-bold text-white mb-2">Finds</h2>
     <button
         onClick={() => setShowListing(true)}
-        className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+        className="px-4 py-2 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+        style={{ backgroundColor: 'rgba(11,79,74, 1)' , marginBottom: '.5rem'
+        }} // Replace with your custom RGB color
     >
       Add Find
     </button>
@@ -132,8 +137,10 @@ export default function BookPageClient({ book }) {
   </section>
 
       {/* Footer */}
-      <footer className="w-full bg-gray-800 text-white py-4 flex items-center justify-center">
+      <footer className="w-full text-white py-4 flex items-center justify-center"
+      style={{ backgroundColor: 'rgba(11,79,74, 1)'      }}>
         <p className="text-sm">© 2025 BiblioByte. All rights reserved.</p>
+        
       </footer>
     </div>
 
