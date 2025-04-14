@@ -42,7 +42,7 @@ function Listing({ show, onClose }) {
             // Simulate API call with a promise
             await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating network request
             alert('Listing submitted successfully!');
-            // Clear the form fields after successful submission
+            //clear the form inputs
             setFile(null); // Clear the file state
             setLink(''); // Clear the link input
             setTermsAccepted(false);
@@ -110,7 +110,6 @@ function Listing({ show, onClose }) {
                     <button
                         type="submit"
                         className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-                        //disabled={!termsAccepted}
                     >
                         Submit
                     </button>

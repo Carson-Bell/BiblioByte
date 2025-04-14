@@ -9,7 +9,9 @@ export default function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         async function checkAuthStatus() {
@@ -20,6 +22,7 @@ export default function Navbar() {
                 if (res.ok) {
                     const data = await res.json();
                     setAuthenticated(data.authenticated);
+                    setUserProfile(data.user);
                 } else {
                     setAuthenticated(false);
                 }
@@ -41,10 +44,16 @@ export default function Navbar() {
             });
             if (res.ok) {
                 setAuthenticated(false);
+                setUserProfile(null);
+                window.location.href = '/';
             }
         } catch (error) {
             console.error('Error signing out:', error);
         }
+    };
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
     };
 
     return (
@@ -70,13 +79,25 @@ export default function Navbar() {
                 </div>
                 <div className="ml-auto flex gap-4">
                     {authenticated ? (
-                            // signout buttons
-                        <button
-                            onClick={handleSignOut}
-                            className="px-4 py-2 bg-zinc-300 text-black rounded-md hover:bg-zinc-900 hover:text-white focus:outline-none"
-                        >
-                            Sign Out
-                        </button>
+                        // profile dropdown
+                        <>
+                            <div onClick={toggleDropdown} className="relative">
+                                <Image
+                                    src={userProfile ? userProfile.picture : '/default-profile.png'} // Fallback to a default picture if none.
+                                    alt="Profile"
+                                    width={40}
+                                    height={40}
+                                    className="rounded-full cursor-pointer"
+                                />
+                                {dropdownOpen && (
+                                    <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
+                                        <Link href="http://localhost:3000/account/123" className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                        <Link href="http://localhost:3000/account/123/listings" className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
+                                        <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
+                                    </div>
+                                )}
+                            </div>
+                        </>
                     ) : (
                         // login/signup buttons
                         <>
