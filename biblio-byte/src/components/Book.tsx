@@ -9,7 +9,7 @@ type BookProps = {
 export default function Book({ book }: BookProps) {
     return (
       <Card className="book-card">
-        <Link href={`/search/${book.link}`} passHref> {/* Dynamic link */}
+        <Link href={`/search/${book._id}`} passHref> {/* Dynamic link */}
             <h2>Title: {book.title}</h2>
           <p>Author: {book.author}</p>
           <p>description: {book.description}</p>
