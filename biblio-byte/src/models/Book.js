@@ -35,16 +35,16 @@ const bookSchema = new mongoose.Schema({
     },
     className: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     school: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     reviews: [reviewSchema], // Array of reviews
 
 });
 
-export default mongoose.models.Books || mongoose.model("Book", bookSchema);
+export default mongoose.models.Book || mongoose.model("Book", bookSchema);
