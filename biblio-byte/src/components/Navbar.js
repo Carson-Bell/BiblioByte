@@ -4,25 +4,30 @@ import Image from "next/image";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchType, setSearchType] = useState('Textbook');
+    const router = useRouter(); // Initialize the router
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault(); // Prevent the default form submission
+        if (!searchTerm.trim()) return;
+
+        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
+    }
+    const handleInputChange = (e) => {
+        setSearchQuery(e.target.value); // Update the search query state
+    };
+
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchType, setSearchType] = useState('Textbook');
-    const router = useRouter();
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (!searchTerm.trim()) return;
-
-        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
-    };
 
     useEffect(() => {
         async function checkAuthStatus() {
@@ -81,17 +86,17 @@ export default function Navbar() {
                         BiblioByte
                     </span>
                 </Link>
-
-                <form onSubmit={handleSearch} className="flex items-center gap-2">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="p-1 border border-gray-300 rounded w-64"
-                    />
-                </form>
-
+                <div className="ml-8 flex-auto">
+                    <form onSubmit={handleSearchSubmit}>
+                        <input
+                            type="text"
+                            placeholder="Textbook"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
+                        />
+                    </form>
+                </div>
                 <div className="ml-auto flex gap-4">
                     {authenticated ? (
                         // profile dropdown
@@ -106,15 +111,9 @@ export default function Navbar() {
                                 />
                                 {dropdownOpen && (
                                     <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
-                                        <Link href="http://localhost:3000/account/123"
-                                              className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
-                                        <Link href="http://localhost:3000/account/123/listings"
-                                              className="block px-4 py-2 text-black hover:bg-gray-200">My
-                                            Reviews/Documents</Link>
-                                        <button onClick={handleSignOut}
-                                                className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign
-                                            Out
-                                        </button>
+                                        <Link href="http://localhost:3000/account/123" className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                        <Link href="http://localhost:3000/account/123/listings" className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
+                                        <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
                                     </div>
                                 )}
                             </div>
@@ -139,8 +138,8 @@ export default function Navbar() {
                 </div>
             </header>
 
-            <LoginModal show={showLogin} onClose={() => setShowLogin(false)}/>
-            <SignupModal show={showSignup} onClose={() => setShowSignup(false)}/>
+            <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
+            <SignupModal show={showSignup} onClose={() => setShowSignup(false)} />
         </>
     );
 }
