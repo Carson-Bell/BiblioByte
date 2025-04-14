@@ -4,8 +4,22 @@ import Image from "next/image";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+    const router = useRouter(); // Initialize the router
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault(); // Prevent the default form submission
+        if (searchQuery.trim()) {
+            router.push('/search'); // Navigate to /search with the query
+        };
+    }
+    const handleInputChange = (e) => {
+        setSearchQuery(e.target.value); // Update the search query state
+    };
+
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
@@ -71,11 +85,15 @@ export default function Navbar() {
                     </span>
                 </Link>
                 <div className="ml-8 flex-auto">
-                    <input
-                        type="text"
-                        placeholder="Search for book"
-                        className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
-                    />
+                    <form onSubmit={handleSearchSubmit}>
+                        <input
+                            type="text"
+                            placeholder="Search for book"
+                            value={searchQuery}
+                            onChange={handleInputChange}
+                            className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
+                        />
+                    </form>
                 </div>
                 <div className="ml-auto flex gap-4">
                     {authenticated ? (
