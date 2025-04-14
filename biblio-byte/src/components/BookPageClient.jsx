@@ -2,17 +2,15 @@
 
 import Image from "next/image";
 import Card from "@/components/Card";
-import connectMongoDB from "../../../../config/mongodb.ts";
-import BookPageHeader from "../../../components/BookPageHeader.js";
-import Review from "../../../components/Review.jsx";
-import Listing from "../../../components/Listing.jsx";
+import BookPageHeader from "./BookPageHeader.js";
+import Review from "./Review.jsx";
+import Listing from "./Listing.jsx";
 
 import React, {useState} from "react";
 
-export default function Home() {
+export default function BookPageClient({ book }) {
   const [showReview, setShowReview] = useState(false);
   const [showListing, setShowListing] = useState(false);
-  connectMongoDB();
 
   return (
       <>
@@ -35,7 +33,7 @@ export default function Home() {
         {/* Text on the Right */}
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl font-bold text-gray-800">
-            Book Title
+            {book.title}
           </h1>
           <h3 className="text-xl font-semibold text-gray-800">
             <span className= "text-4xl font-bold">4.5</span>/5
@@ -46,9 +44,7 @@ export default function Home() {
             </button>
           </a>
           <p className="text-m text-gray-600">
-            This is a description of the book. It provides an overview of the content, themes, and
-            key points that the book covers. It can also include information about the author and
-            the significance of the book in its genre or field.
+            {book.description || "No description available"}
           </p>
         </div>
       </main>
