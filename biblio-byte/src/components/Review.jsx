@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 
-export default function Review({ show, onClose }) {
+export default function Review({ show, onClose, bookId }) {
     const [formData, setFormData] = useState({
+        name: '',
         description: '',
         rating: 1
     });
@@ -27,9 +28,27 @@ export default function Review({ show, onClose }) {
         e.preventDefault();
         console.log("Review details:", formData);
 
+        try {
+            const response = await fetch(`/api/reviews`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...formData, bookId }),
+            });
 
-        alert('Review submitted!');
-        onClose();
+            if (response.ok) {
+                alert('Review submitted!');
+                onClose();
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.message}`);
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            alert('Failed to submit review.');
+        }
+
     };
 
     return (
@@ -46,6 +65,19 @@ export default function Review({ show, onClose }) {
                     className="flex flex-col gap-3"
                     onSubmit={handleSubmit}
                 >
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Name
+                        </label>
+                        <textarea
+                            className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
+                            name="name"
+                            placeholder="What's your review?"
+                            value={formData.name}
+                            onChange={handleChange}
+                            rows={1}
+                        ></textarea>
+                    </div>
                     <div>
                         <label className="block font-semibold mb-2">
                             Description
