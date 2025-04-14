@@ -10,6 +10,8 @@ export async function POST(req) {
 
     const { bookId, name, description, rating } = await req.json();
 
+    console.log("Incoming data:", { bookId, name, description, rating }); // jen debug
+
     if (!bookId || !name || !description || !rating) {
         return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });
     }
@@ -23,9 +25,9 @@ export async function POST(req) {
         }
 
         const review = {
-            reviewer: name,
+            name,
             rating,
-            comment: description,
+            comment: description
         };
 
         book.reviews.push(review);

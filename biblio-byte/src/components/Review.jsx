@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 
 export default function Review({ show, onClose, bookId }) {
+    console.log("Review.jsx received bookId:", bookId); // debug
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -28,13 +30,20 @@ export default function Review({ show, onClose, bookId }) {
         e.preventDefault();
         console.log("Review details:", formData);
 
+        const payload = {
+            ...formData,
+            bookId: bookId // Use bookId directly from props
+        };
+
+        console.log("Sending review payload:", { ...formData, bookId }); // jen debugging
+
         try {
             const response = await fetch(`/api/reviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...formData, bookId }),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {
