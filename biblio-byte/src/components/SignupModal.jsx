@@ -33,6 +33,7 @@ export default function SignupModal({show, onClose}) {
                         const res = await fetch('/api/signup', {
                             method: 'POST',
                             body: JSON.stringify({name, email, password, university}),
+                            credentials: 'include', // Include cookies in the request
                         });
 
                         if (res.ok) {
