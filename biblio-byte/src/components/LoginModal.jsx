@@ -35,8 +35,7 @@ export default function LoginModal({show, onClose}) {
                         });
 
                         if (res.ok) {
-                            alert('Login successful');
-                            onClose();
+                            window.location.href = '/';
                         } else {
                             alert('Invalid login');
                         }
