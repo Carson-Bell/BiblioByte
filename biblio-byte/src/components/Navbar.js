@@ -7,14 +7,15 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-    const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchType, setSearchType] = useState('Textbook');
     const router = useRouter(); // Initialize the router
 
     const handleSearchSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
-        if (searchQuery.trim()) {
-            router.push('/search'); // Navigate to /search with the query
-        };
+        if (!searchTerm.trim()) return;
+
+        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
     }
     const handleInputChange = (e) => {
         setSearchQuery(e.target.value); // Update the search query state
@@ -26,6 +27,7 @@ export default function Navbar() {
     const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
 
     useEffect(() => {
         async function checkAuthStatus() {
@@ -88,9 +90,9 @@ export default function Navbar() {
                     <form onSubmit={handleSearchSubmit}>
                         <input
                             type="text"
-                            placeholder="Search for book"
-                            value={searchQuery}
-                            onChange={handleInputChange}
+                            placeholder="Textbook"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                         />
                     </form>
