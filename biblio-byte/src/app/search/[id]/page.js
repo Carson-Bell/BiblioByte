@@ -5,11 +5,13 @@ import Card from "@/components/Card";
 import connectMongoDB from "../../../../config/mongodb.ts";
 import BookPageHeader from "../../../components/BookPageHeader.js";
 import Review from "../../../components/Review.jsx";
-import LoginModal from "../../../components/LoginModal.jsx";
+import Listing from "../../../components/Listing.jsx";
+
 import React, {useState} from "react";
 
 export default function Home() {
   const [showReview, setShowReview] = useState(false);
+  const [showListing, setShowListing] = useState(false);
   connectMongoDB();
 
   return (
@@ -101,6 +103,12 @@ export default function Home() {
   {/* Find Section */}
   <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
     <h2 className="text-3xl font-bold text-gray-800 mb-4">Finds</h2>
+    <button
+        onClick={() => setShowListing(true)}
+        className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+    >
+      Add Find
+    </button>
     <Card className="bg-white p-4 shadow-md w-full">
     
         <div>
@@ -134,6 +142,7 @@ export default function Home() {
     </div>
 
         <Review show={showReview} onClose={() => setShowReview(false)} />
+        <Listing show={showListing} onClose={() => setShowListing(false)} />
     </>
   );
 }
