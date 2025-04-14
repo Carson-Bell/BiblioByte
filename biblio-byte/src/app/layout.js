@@ -1,7 +1,7 @@
+
 import './globals.css';
 import Image from 'next/image';
 import NavbarUnauth from "../components/NavbarUnauth.js";
-
 export const metadata = {
   title: 'BiblioByte',
   description: 'A book search and review platform',

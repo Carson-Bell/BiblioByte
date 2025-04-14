@@ -1,19 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #eeeeee;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: url(../assets/bookBack.png) no-repeat center center fixed; /* Center the image and fix it in place */
+  background-size: cover; /* Ensures the image covers the entire background */
+  color: var(--foreground);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
