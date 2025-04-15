@@ -26,47 +26,60 @@ export default function Home() {
                 <title>BiblioByte</title>
             </Head>
             <div style={backgroundStyle}>
-                <div style={cardStyle}>
-                    <div className="text-3xl font-semibold hover:font-bold text-white" style={headerStyle}>
-                    BiblioByte
+                <div style={columnsStyle}>
+                    {/* Left Column */}
+                    <div style={leftColumnStyle}>
                     </div>
-                    <div className= "text-white" style={descriptionStyle}>
-                        <p>Search for a textbook, class, or school!</p>
+
+                    {/* Center Column: BiblioByte Card */}
+                    <div style={cardStyle}>
+                        <div className="text-3xl font-semibold hover:font-bold text-white" style={headerStyle}>
+                            BiblioByte
+                        </div>
+                        <div className="text-white" style={descriptionStyle}>
+                            <p>Search for a textbook, class, or school!</p>
+                        </div>
+                        <form onSubmit={handleSearch} style={formStyle}>
+                            <select
+                                value={searchType}
+                                onChange={(e) => setSearchType(e.target.value)}
+                                style={selectStyle}
+                            >
+                                <option value="Textbook">Textbook</option>
+                                <option value="Class">Class</option>
+                                <option value="School">School</option>
+                            </select>
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={inputStyle}
+                            />
+                            <button type="submit" style={buttonStyle}>Search</button>
+                        </form>
+                        <Link href="/search/123">
+                            <button>Go to book page</button>
+                        </Link>
                     </div>
-                    <form onSubmit={handleSearch} style={formStyle}>
-                        <select
-                            value={searchType}
-                            onChange={(e) => setSearchType(e.target.value)}
-                            style={selectStyle}
-                        >
-                            <option  value="Textbook">Textbook</option>
-                            <option value="Class">Class</option>
-                            <option value="School">School</option>
-                            
 
-                        </select>
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            style={inputStyle}
-                        />
-
-                        <button type="submit" style={buttonStyle}>Search</button>
-                    </form>
-
-                    {/* Temporary button to navigate to book page */}
-                    <Link href="/search/123">
-                        <button>Go to book page</button>
-                    </Link>
-
+                    {/* Right Column */}
+                    <div style={rightColumnStyle}>
+                        <h1 className="text-4xl font-bold text-gray-800">Welcome to BiblioByte!</h1>
+                        <p className="text-gray-600 text-xl">
+                             BiblioByte is a resource for students to write and read reviews about the quality of their class textbook and determine if it's worth purchasing for their class.
+                            BiblioByte can also be used as a platform for students to find places to purchase the textbooks needed for their classes.
+                        </p>
+                    <br />
+                        <p className="text-gray-600 text-xl">
+                        Don't see the textbook your looking for? Create an account to add textbooks to BiblioByte and to leave reviews over textbooks you have read.
+                        </p>
+                    </div>
                 </div>
             </div>
         </>
     );
 }
-
 const backgroundStyle = {
     position: 'fixed',
     top: 0,
@@ -81,15 +94,48 @@ const backgroundStyle = {
     zIndex: -1 // Ensures the background stays behind the card
 };
 
+const columnsStyle = {
+  display: 'flex', // Flexbox layout for columns
+  justifyContent: 'space-between', // Space between columns
+  alignItems: 'center', // Align items vertically
+  width: '90%', // Ensure the container is responsive
+  maxWidth: '1200px', // Limit the maximum width
+  margin: '0 auto', // Center the container horizontally
+  gap: '20px', // Add space between columns
+};
+
+const leftColumnStyle = {
+  flex: 1,
+  textAlign: 'left',
+  padding: '20px',
+  backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent background
+  borderRadius: '10px',
+};
+
 const cardStyle = {
-    textAlign: 'center',
-    backgroundColor: 'rgba(11,79,74, 1)', // Semi-transparent background
-    padding: '20px',
-    borderRadius: '20px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-    maxWidth: '600px',
-    width: '90%', // Make it responsive for smaller screens
-    zIndex: 1 // Ensures the card is above the background
+  flex: 2, // Center column takes more space
+  textAlign: 'center',
+  backgroundColor: 'rgba(11,79,74, 1)', // Semi-transparent background
+  padding: '20px',
+  borderRadius: '20px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  maxWidth: '600px',
+  width: '100%', // Make it responsive for smaller screens
+};
+
+const rightColumnStyle = {
+  flex: 1, // Take up equal space
+  textAlign: 'center', // Center text horizontally
+  display: 'flex', // Use flexbox for centering
+  flexDirection: 'column', // Ensure content stacks vertically
+  justifyContent: 'center', // Center content vertically
+  alignItems: 'center', // Center content horizontally
+  height: '100%', // Ensure the column takes full height
+  padding: '20px',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)', // Light semi-transparent background
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  transform: 'translateY(5%)'
 };
 
 const headerStyle = {

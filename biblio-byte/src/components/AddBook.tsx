@@ -89,6 +89,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
               onChange={(e) => setAuthor(e.target.value)}
               required
               className="p-2 border rounded"
+              
           />
           <textarea
               placeholder="Description"
