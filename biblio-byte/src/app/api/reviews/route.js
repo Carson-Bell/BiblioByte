@@ -23,7 +23,7 @@ export async function POST(req) {
         }
 
         const review = {
-            reviewer: name,
+            name,
             rating,
             comment: description,
         };

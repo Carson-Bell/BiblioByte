@@ -72,7 +72,7 @@ export default function Review({ show, onClose, bookId }) {
                         <textarea
                             className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
                             name="name"
-                            placeholder="What's your review?"
+                            placeholder="Your name"
                             value={formData.name}
                             onChange={handleChange}
                             rows={1}
