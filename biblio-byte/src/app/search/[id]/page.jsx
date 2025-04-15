@@ -20,7 +20,7 @@ export default async function Page({ params }) {
     return (
         <>
         <BookPageClient book={book} />
-        <ReviewWrapper bookId={book._id} /> {/* Pass bookId */}
+        <ReviewWrapper bookId={book.id} /> {/* Pass bookId */}
 
     </>
     );
