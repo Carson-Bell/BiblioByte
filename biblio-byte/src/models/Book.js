@@ -40,6 +40,7 @@ const bookSchema = new mongoose.Schema({
         trim: true,
     },
     reviews: [reviewSchema], // Array of reviews
+    thumbnail: String,
 
 });
 

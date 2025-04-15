@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from "next/navigation";
 
 export default function BookPreviewModal({ isOpen, onClose, onConfirm, book, searchTerm }) {
-const router = useRouter();
+    const router = useRouter();
 
     useEffect(() => {
         if (isOpen) document.body.style.overflow = 'hidden';
@@ -53,6 +53,8 @@ const router = useRouter();
                         onClick={async () => {
                             await onConfirm?.();
                             setTimeout(() => {
+                                console.log("Redirecting with searchTerm:", searchTerm);
+                                console.log("✅ Confirm clicked — redirecting with:", searchTerm);
                                 window.location.href = `/search?term=${encodeURIComponent(searchTerm)}&type=Textbook`;
                             }, 500); // short delay for collection update
                         }}

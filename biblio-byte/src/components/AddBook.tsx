@@ -118,7 +118,9 @@ export default function AddBook({ onAddBook }: AddBookProps) {
             isOpen={modalOpen}
             onClose={() => setModalOpen(false)}
             onConfirm={handleConfirm}
-            book={previewBook} searchTerm={searchTerm}        />
+            book={previewBook}
+            searchTerm={`${title} ${author}`}
+        />
       </>
   );
 }
