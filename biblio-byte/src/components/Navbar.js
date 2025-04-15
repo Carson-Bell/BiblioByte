@@ -11,6 +11,7 @@ export default function Navbar() {
     const [searchType, setSearchType] = useState('Textbook');
     const router = useRouter(); // Initialize the router
     const [user, setUser] = useState(null);
+    const [loggingOut, setLoggingOut] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -73,6 +74,9 @@ export default function Navbar() {
 
     const handleSignOut = async () => {
         try {
+            setLoggingOut(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             const res = await fetch('/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
@@ -136,6 +140,14 @@ export default function Navbar() {
                                     />
                                 ) : (
                                     <p>Profile</p> // fallback if user hasn’t loaded yet
+                                )}
+
+                                {loggingOut && (
+                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
+                                        <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
+                                            <p className="text-lg font-semibold text-white">Logging you out...</p>
+                                        </div>
+                                    </div>
                                 )}
 
                                 {dropdownOpen && (

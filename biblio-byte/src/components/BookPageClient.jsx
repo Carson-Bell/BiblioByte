@@ -22,13 +22,7 @@ export default function BookPageClient({ book }) {
       <main className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
         {/* Image on the Left */}
         <div className="flex-shrink-0">
-          <Image
-            src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg" // Replace with the path to your image
-            alt="Splash Image"
-            width={400}
-            height={300}
-            className="rounded-lg"
-          />
+          <img src={book.thumbnail} alt={book.title} className="rounded" />
         </div>
         {/* Text on the Right */}
         <div className="flex flex-col gap-4">
