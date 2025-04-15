@@ -144,7 +144,8 @@ export default function BookPageClient({ book }) {
       </footer>
     </div>
 
-        <Review show={showReview} onClose={() => setShowReview(false)} />
+        <Review show={showReview} onClose={() => setShowReview(false)}
+        bookId = {book._id.toString()} />
         <Listing show={showListing} onClose={() => setShowListing(false)} />
     </>
   );

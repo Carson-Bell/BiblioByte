@@ -14,7 +14,7 @@ export default function Review({ show, onClose, bookId }) {
         document.body.style.overflow = show ? 'hidden' : 'auto';
     }, [show]);
 
-    if (!show) return null;
+        if (!show) return null;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,7 +26,16 @@ export default function Review({ show, onClose, bookId }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Review details:", formData);
+
+        if (!formData.name || !formData.description || !formData.rating || !bookId) {
+            alert("All fields are required.");
+            return;
+        }
+    
+        const reviewData = {
+            ...formData,
+            bookId
+        };
 
         try {
             const response = await fetch(`/api/reviews`, {
