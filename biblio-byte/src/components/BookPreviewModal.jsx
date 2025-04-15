@@ -1,12 +1,25 @@
 'use client';
 import React from 'react';
+import { useEffect } from 'react';
+import { useRouter } from "next/navigation";
 
-export default function BookPreviewModal({ isOpen, onClose, onConfirm, book }) {
+export default function BookPreviewModal({ isOpen, onClose, onConfirm, book, searchTerm }) {
+const router = useRouter();
+
+    useEffect(() => {
+        if (isOpen) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'auto';
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
+
     if (!isOpen || !book) return null;
 
     return (
         <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20"
             onClick={onClose}
         >
             <div
@@ -35,12 +48,19 @@ export default function BookPreviewModal({ isOpen, onClose, onConfirm, book }) {
                     >
                         No
                     </button>
+
                     <button
-                        onClick={onConfirm}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                        onClick={async () => {
+                            await onConfirm?.();
+                            setTimeout(() => {
+                                window.location.href = `/search?term=${encodeURIComponent(searchTerm)}&type=Textbook`;
+                            }, 500); // short delay for collection update
+                        }}
+                        className="bg-teal-800 hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded"
                     >
                         Yes
                     </button>
+
                 </div>
             </div>
         </div>

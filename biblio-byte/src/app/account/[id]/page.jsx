@@ -1,7 +1,8 @@
 // Profile Page
 'use client';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
     const [fullName, setFullName] = useState('');
@@ -10,6 +11,8 @@ export default function Page() {
     const [school, setSchool] = useState('');
     const [password, setPassword] = useState('');
     const [profilePic, setProfilePic] = useState('https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg');
+    const [authenticated, setAuthenticated] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
 
     const handleUpdate = (event) => {
         event.preventDefault();
@@ -17,11 +20,63 @@ export default function Page() {
         console.log(`Profile updated for ${email}`);
     };
 
-    const handleImageChange = (event) => {
+    const handleImageChange = async (event) => {
         if (event.target.files && event.target.files[0]) {
-            setProfilePic(URL.createObjectURL(event.target.files[0]));
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
+
+            const res = await fetch('/api/users/uploadProfilePic', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+
+            const data = await res.json();
+
+            console.log('Image preview:', data.imageUrl);
+
+            if (res.ok) {
+                setProfilePic(data.imageUrl);
+            } else {
+                console.error('Upload failed:', data.message);
+            }
         }
     };
+
+
+    const handleSignOut = async () => {
+        try {
+            const res = await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            if (res.ok) {
+                setAuthenticated(false);
+                setUserProfile(null);
+                window.location.href = '/';
+            }
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        async function fetchProfile() {
+            const res = await fetch('/api/users/me', { credentials: 'include' });
+            const data = await res.json();
+            if (res.ok) {
+                setFullName(data.fullName || '');
+                setEmail(data.email || '');
+                setConfirmEmail('');
+                setSchool(data.school || '');
+                setPassword('');
+                setProfilePic(data.profilePic || 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg');
+            }
+        }
+        fetchProfile();
+    }, []);
+
 
     return (
         <>
@@ -48,9 +103,9 @@ export default function Page() {
                     <button style={buttonStyle} onClick={() => document.querySelector('input[type="file"]').click()}>
                         Upload Image
                     </button>
-                    <p><strong>First Last</strong></p>
-                    <p>school</p>
-                    <button style={buttonStyle}>Logout</button>
+                    <p><strong>{fullName}</strong></p>
+                    <p>{school}</p>
+                    {/*<button style={buttonStyle} onClick={handleSignOut}>Logout</button>*/}
                 </div>
                 <div style={{...cardStyle, ...card2Style}} className="card2 edit-profile">
                     <h2>Edit Profile</h2>
