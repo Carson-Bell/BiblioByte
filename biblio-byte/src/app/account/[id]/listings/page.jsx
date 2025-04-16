@@ -40,7 +40,7 @@ function Page() {
     return (
         <div style={pageStyle}>
             <div style={sectionStyle}>
-                <h1>Reviews</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">Reviews</h1>
                 {reviews.map(review =>
                     <Review
                         key={review.id}
@@ -53,7 +53,7 @@ function Page() {
                 )}
             </div>
             <div style={sectionStyle}>
-                <h1>Listings</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">Documents</h1>
                 <div style={listingContainerStyle}>
                     {listings.map(listing =>
                         <Listing
@@ -80,13 +80,13 @@ const pageStyle = {
 };
 
 const sectionStyle = {
-    marginBottom: '40px'
+    marginBottom: '40px',
 };
 
 const reviewCardStyle = {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     padding: '15px',
     borderRadius: '5px',
