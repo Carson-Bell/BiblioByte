@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Review from './Review';
 
 export default function ReviewWrapper({ bookId }) {
-    const [showReview, setShowReview] = useState(true);
+    const [showReview, setShowReview] = useState(false);
     const [currentBookId, setCurrentBookId] = useState(bookId); // Persist bookId in state
 
     const handleClose = () => {
