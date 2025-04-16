@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 
-function Listing({ show, onClose }) {
+function Listing({ show, onClose, bookId }) {
     // State to manage file, link, and terms acceptance
     const fileInputRef = useRef(null);
     const [file, setFile] = useState(null);
@@ -39,9 +39,33 @@ function Listing({ show, onClose }) {
 
         // Simulate API call with a promise
         try {
-            // Simulate API call with a promise
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating network request
-            alert('Listing submitted successfully!');
+            // Create a FormData object to handle file uploads
+        const formData = new FormData();
+        formData.append('bookId', bookId); // Pass the bookId
+        if (file) {
+            formData.append('file', file); // Add the file if provided
+        }
+        if (link) {
+            formData.append('url', link); // Add the link if provided
+        }
+
+        // Make the API call
+        const response = await fetch('/api/finds', {
+            method: 'POST',
+            body: JSON.stringify({
+                bookId,
+                file: file ? file.name : null, // Send file name if file exists
+                url: link || null, // Send URL if provided
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit listing');
+        }
+        alert('Listing submitted successfully!');
             //clear the form inputs
             setFile(null); // Clear the file state
             setLink(''); // Clear the link input

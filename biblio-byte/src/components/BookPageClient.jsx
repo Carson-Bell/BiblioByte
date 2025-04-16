@@ -130,7 +130,8 @@ export default function BookPageClient({ book, reviews }) {
 
         <Review show={showReview} onClose={() => setShowReview(false)}
                 bookId={book._id.toString()}/>
-        <Listing show={showListing} onClose={() => setShowListing(false)}/>
+        <Listing show={showListing} onClose={() => setShowListing(false)}
+                bookId={book._id.toString()}/>
       </>
   );
 }
