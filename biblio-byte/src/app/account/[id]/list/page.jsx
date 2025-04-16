@@ -1,14 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-function BookCard({ title, author, school, description }) {
+function BookCard({ title, author }) {
     return (
         <div style={bookCardStyle}>
             <div style={bookContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
                 <p><strong>Author:</strong> {author}</p>
-                <p><strong>School:</strong> {school}</p>
-                <p>{description}</p>
             </div>
             <div>
                 <button
@@ -43,14 +41,12 @@ function Page() {
     return (
         <div style={pageStyle}>
             <div style={sectionStyle}>
-                <h1>Saved Books</h1>
+                <h1 className="text-3xl font-bold text-white mb-2" align='center'>Saved Books</h1>
                 {savedBooks.map(book => (
                     <BookCard
-                        key={book._id}
+                        key={book.id}
                         title={book.title}
                         author={book.author}
-                        school={book.school}
-                        description={book.description}
                     />
                 ))}
             </div>
