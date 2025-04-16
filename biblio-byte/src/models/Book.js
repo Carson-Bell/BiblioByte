@@ -23,6 +23,24 @@ const reviewSchema = new mongoose.Schema({
     },
 });
 
+const findsSchema = new mongoose.Schema({
+    name: {
+        type: String, // Name of the find
+        required: true,
+        trim: true,
+    },
+    file: {
+        type: String, // URL or path to the file
+        required: false,
+        trim: true,
+    },
+    url: {
+        type: String, // URL to the find
+        required: false,
+        trim: true,
+    }
+});
+
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -45,6 +63,7 @@ const bookSchema = new mongoose.Schema({
         trim: true,
     },
     reviews: [reviewSchema], // Array of reviews
+    finds: [findsSchema],
     thumbnail: String,
 
 });

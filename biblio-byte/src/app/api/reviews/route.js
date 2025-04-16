@@ -1,5 +1,6 @@
 import connectMongoDB from '../../../../config/mongodb';
 import Book from '../../../models/Book';
+import User from '../../../models/User'; // Import the User model
 import auth from '../../../middleware/auth';
 
 export async function POST(req) {
@@ -8,16 +9,21 @@ export async function POST(req) {
         return new Response(JSON.stringify({ message: error }), { status: 401 });
     }
 
-    const { bookId, name, description, rating } = await req.json();
+    const { bookId, title, description, rating } = await req.json();
 
-    console.log("Incoming data:", { bookId, name, description, rating }); // jen debug
+    console.log("Incoming data:", { bookId, title, description, rating }); // jen debug
 
-    if (!bookId || !name || !description || !rating) {
+    if (!bookId || !title || !description || !rating) {
         return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });
     }
 
     try {
         await connectMongoDB();
+
+        const user = await User.findById(decoded.id).lean();
+        if (!user) {
+            return new Response(JSON.stringify({ message: 'User not found' }), { status: 404 });
+        }
 
         const book = await Book.findById(bookId);
         if (!book) {
@@ -25,13 +31,18 @@ export async function POST(req) {
         }
 
         const review = {
-            name,
+            name: user.name , // Use user's name or email if name is not available
+            title: title,
             rating,
             comment: description
         };
+        console.log("Review object:", review);
+
 
         book.reviews.push(review);
         await book.save();
+        console.log("Review added successfully");
+
 
         return new Response(JSON.stringify({ message: 'Review added successfully' }), { status: 201 });
     } catch (error) {
