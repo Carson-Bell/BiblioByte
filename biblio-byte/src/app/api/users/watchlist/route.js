@@ -1,6 +1,7 @@
 import connectMongoDB from '../../../../../config/mongodb';
 import User from '../../../../models/User';
 import auth from '../../../../middleware/auth';
+import Book from '../../../../models/Book';
 
 export async function POST(req) {
     const { valid, decoded, error } = auth(req);
@@ -23,16 +24,16 @@ export async function POST(req) {
 
         const user = await User.findById(decoded.id);
 
-        // Check if already in watchlist
+        // check existence
         const alreadyExists = user.watchlist.some(item =>
-            item.book.toString() === bookId
+            item.book?.toString() === bookId
         );
 
         if (alreadyExists) {
             return new Response(JSON.stringify({ message: 'Book already in watchlist' }), { status: 409 });
         }
 
-        // Add book
+        // add book to array
         user.watchlist.push({ book: bookId });
         await user.save();
 
@@ -42,4 +43,34 @@ export async function POST(req) {
         console.error('Error updating watchlist:', err);
         return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
     }
+}
+
+export async function GET(req) {
+    const { valid, decoded, error } = auth(req);
+    if (!valid) {
+        return new Response(JSON.stringify({ error }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    await connectMongoDB();
+
+    const user = await User.findById(decoded.id).populate('watchlist.book');
+
+    if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), {
+            status: 404,
+        });
+    }
+
+    const books = user.watchlist.map(entry => ({
+        ...entry.book.toObject(),
+        addedAt: entry.addedAt,
+    }));
+
+    return new Response(JSON.stringify({ books }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
 }

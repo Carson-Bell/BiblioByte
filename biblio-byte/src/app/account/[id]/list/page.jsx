@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
 function BookCard({ title, author, school, description }) {
     return (
@@ -14,22 +14,22 @@ function BookCard({ title, author, school, description }) {
     );
 }
 function Page() {
-    const [savedBooks, setSavedBooks] = useState([
-        {
-            id: 1,
-            title: "Introduction to Algorithms",
-            author: "Cormen, Leiserson, Rivest, and Stein",
-            school: "MIT",
-            description: "Comprehensive guide to modern algorithm design and analysis."
-        },
-        {
-            id: 2,
-            title: "Computer Networking: A Top-Down Approach",
-            author: "Kurose and Ross",
-            school: "Georgia Tech",
-            description: "Explains networking concepts starting from applications down to the physical layer."
-        }
-    ]);
+    const [savedBooks, setSavedBooks] = useState([]);
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            try {
+                const res = await fetch('/api/users/watchlist');
+                const data = await res.json();
+                setSavedBooks(data.books || []);
+            } catch (err) {
+                console.error('Failed to fetch watchlist:', err);
+            }
+        };
+
+        fetchWatchlist();
+    }, []);
+
 
     return (
         <div style={pageStyle}>
@@ -37,7 +37,7 @@ function Page() {
                 <h1>Saved Books</h1>
                 {savedBooks.map(book => (
                     <BookCard
-                        key={book.id}
+                        key={book._id}
                         title={book.title}
                         author={book.author}
                         school={book.school}

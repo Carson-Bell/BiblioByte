@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-const { Schema } = mongoose;
 
 const watchlistSchema = new mongoose.Schema({
-    bookId: { type: Schema.Types.ObjectId, ref: 'Book' },
-    addedAt: { type: Date, default: Date.now },
-})
+    book: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book',
+    },
+    addedAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
 
 const userSchema = new mongoose.Schema({
     name: {
