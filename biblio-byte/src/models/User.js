@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+const { Schema } = mongoose;
+
+const watchlistSchema = new mongoose.Schema({
+    bookId: { type: Schema.Types.ObjectId, ref: 'Book' },
+    addedAt: { type: Date, default: Date.now },
+})
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -30,6 +36,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg',
     },
+    watchlist: [watchlistSchema],
 });
 
 userSchema.pre('save', async function(next) {
