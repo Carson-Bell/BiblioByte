@@ -16,7 +16,7 @@ export default function Review({ show, onClose, bookId }) {
         document.body.style.overflow = show ? 'hidden' : 'auto';
     }, [show]);
 
-    if (!show) return null;
+        if (!show) return null;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +28,16 @@ export default function Review({ show, onClose, bookId }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Review details:", formData);
+
+        if (!formData.name || !formData.description || !formData.rating || !bookId) {
+            alert("All fields are required.");
+            return;
+        }
+    
+        const reviewData = {
+            ...formData,
+            bookId
+        };
 
         const payload = {
             ...formData,
@@ -81,7 +90,7 @@ export default function Review({ show, onClose, bookId }) {
                         <textarea
                             className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
                             name="name"
-                            placeholder="What's your review?"
+                            placeholder="Your name"
                             value={formData.name}
                             onChange={handleChange}
                             rows={1}
