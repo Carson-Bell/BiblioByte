@@ -2,17 +2,15 @@
 
 import Image from "next/image";
 import Card from "@/components/Card";
-import connectMongoDB from "../../../../config/mongodb.ts";
-import BookPageHeader from "../../../components/BookPageHeader.js";
-import Review from "../../../components/Review.jsx";
-import Listing from "../../../components/Listing.jsx";
+import BookPageHeader from "./BookPageHeader.js";
+import Review from "./Review.jsx";
+import Listing from "./Listing.jsx";
 
 import React, {useState} from "react";
 
-export default function Home() {
+export default function BookPageClient({ book }) {
   const [showReview, setShowReview] = useState(false);
   const [showListing, setShowListing] = useState(false);
-  connectMongoDB();
 
   return (
       <>
@@ -24,18 +22,12 @@ export default function Home() {
       <main className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
         {/* Image on the Left */}
         <div className="flex-shrink-0">
-          <Image
-            src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg" // Replace with the path to your image
-            alt="Splash Image"
-            width={400}
-            height={300}
-            className="rounded-lg"
-          />
+          <img src={book.thumbnail} alt={book.title} className="rounded" />
         </div>
         {/* Text on the Right */}
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl font-bold text-gray-800">
-            Book Title
+            {book.title}
           </h1>
           <h3 className="text-xl font-semibold text-gray-800">
             <span className= "text-4xl font-bold">4.5</span>/5
@@ -47,9 +39,7 @@ export default function Home() {
             </button>
           </a>
           <p className="text-m text-gray-600">
-            This is a description of the book. It provides an overview of the content, themes, and
-            key points that the book covers. It can also include information about the author and
-            the significance of the book in its genre or field.
+            {book.description || "No description available"}
           </p>
         </div>
       </main>
@@ -148,7 +138,8 @@ export default function Home() {
       </footer>
     </div>
 
-        <Review show={showReview} onClose={() => setShowReview(false)} />
+        <Review show={showReview} onClose={() => setShowReview(false)}
+        bookId = {book._id.toString()} />
         <Listing show={showListing} onClose={() => setShowListing(false)} />
     </>
   );

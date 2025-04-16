@@ -58,9 +58,7 @@ export default function Home() {
                             />
                             <button type="submit" style={buttonStyle}>Search</button>
                         </form>
-                        <Link href="/search/123">
-                            <button>Go to book page</button>
-                        </Link>
+
                     </div>
 
                     {/* Right Column */}

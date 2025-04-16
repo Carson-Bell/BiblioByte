@@ -20,6 +20,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [modalOpen, setModalOpen] = useState(false);
   const [previewBook, setPreviewBook] = useState<Book | null>(null);
@@ -28,6 +29,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
     e.preventDefault();
 
     const query = `${title} ${author}`;
+    setSearchTerm(query);
     const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
     const data = await res.json();
 
@@ -117,6 +119,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
             onClose={() => setModalOpen(false)}
             onConfirm={handleConfirm}
             book={previewBook}
+            searchTerm={`${title} ${author}`}
         />
       </>
   );

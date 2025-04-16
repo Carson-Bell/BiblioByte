@@ -10,6 +10,26 @@ export default function Navbar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
     const router = useRouter(); // Initialize the router
+    const [user, setUser] = useState(null);
+    const [loggingOut, setLoggingOut] = useState(false);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await fetch('/api/users/me', {
+                    credentials: 'include',
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    setUser(data);
+                }
+            } catch (err) {
+                console.error('Failed to load user:', err);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const handleSearchSubmit = (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -54,6 +74,9 @@ export default function Navbar() {
 
     const handleSignOut = async () => {
         try {
+            setLoggingOut(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             const res = await fetch('/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
@@ -74,7 +97,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center">
+            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
                 <Link href="/" className="flex items-center gap-2">
                     <Image
                         src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg"
@@ -102,13 +125,31 @@ export default function Navbar() {
                         // profile dropdown
                         <>
                             <div onClick={toggleDropdown} className="relative">
-                                <Image
-                                    src={userProfile ? userProfile.picture : '/default-profile.png'} // Fallback to a default picture if none.
-                                    alt="Profile"
-                                    width={40}
-                                    height={40}
-                                    className="rounded-full cursor-pointer"
-                                />
+                                {user?.profilePic ? (
+                                    <img
+                                        src={user.profilePic}
+                                        alt="Profile"
+                                        style={{
+                                            height: '35px',
+                                            width: '35px',
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            border: '1px solid #ccc',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                ) : (
+                                    <p>Profile</p> // fallback if user hasn’t loaded yet
+                                )}
+
+                                {loggingOut && (
+                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
+                                        <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
+                                            <p className="text-lg font-semibold text-white">Logging you out...</p>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {dropdownOpen && (
                                     <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
                                         <Link href="http://localhost:3000/account/123" className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
