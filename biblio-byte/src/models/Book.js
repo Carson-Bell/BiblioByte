@@ -6,6 +6,11 @@ const reviewSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    title: {
+        type: String, // Title of the review
+        required: true,
+        trim: true,
+    },
     rating: {
         type: Number, // Rating out of 5
         required: true,
