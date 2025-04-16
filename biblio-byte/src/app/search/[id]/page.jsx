@@ -1,7 +1,6 @@
 import connectMongoDB from '../../../../config/mongodb';
 import Book from '../../../models/Book';
 import BookPageClient from '../../../components/BookPageClient';
-import ReviewWrapper from '../../../components/ReviewWrapper';
 
 export default async function Page({ params }) {
     const { id } = await params;
@@ -26,9 +25,7 @@ export default async function Page({ params }) {
 
     return (
         <>
-        <BookPageClient book={book} />
-        <ReviewWrapper bookId={book._id.toString()} /> {/* Pass bookId */}
-
-    </>
+            <BookPageClient book={book} reviews={book.reviews || []} />
+        </>
     );
 }
