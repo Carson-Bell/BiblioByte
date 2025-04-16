@@ -27,8 +27,6 @@ export default async function Page({ params }) {
     return (
         <>
         <BookPageClient book={book} />
-        <ReviewWrapper bookId={book._id.toString()} /> {/* Pass bookId */}
-
     </>
     );
 }
