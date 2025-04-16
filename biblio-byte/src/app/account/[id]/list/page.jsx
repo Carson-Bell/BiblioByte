@@ -10,9 +10,18 @@ function BookCard({ title, author, school, description }) {
                 <p><strong>School:</strong> {school}</p>
                 <p>{description}</p>
             </div>
+            <div>
+                <button
+                    style={deleteButtonStyle}
+                    onClick={() => onDelete(id)}
+                >
+                    X
+                </button>
+            </div>
         </div>
     );
 }
+
 function Page() {
     const [savedBooks, setSavedBooks] = useState([]);
 
@@ -66,17 +75,31 @@ const bookCardStyle = {
     backgroundColor: '#fff',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     padding: '15px',
-    borderRadius: '5px',
-    marginBottom: '10px'
+    borderRadius: '8px',
+    marginBottom: '10px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
 };
 
 const bookContentStyle = {
-    flex: '1'
+    flex: '1',
+    marginRight: '20px',
 };
 
 const titleStyle = {
     fontWeight: 'bold',
     marginBottom: '5px'
+};
+
+const deleteButtonStyle = {
+    backgroundColor: '#990F02',
+    color: 'white',
+    border: 'none',
+    padding: '8px 12px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease'
 };
 
 export default Page;
