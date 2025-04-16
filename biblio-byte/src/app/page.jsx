@@ -40,16 +40,16 @@ export default function Home() {
                             <p>Search for a textbook, class, or school!</p>
                         </div>
                         <form onSubmit={handleSearch} style={formStyle}>
-                            <select
+                            <select className='text-white'
                                 value={searchType}
                                 onChange={(e) => setSearchType(e.target.value)}
                                 style={selectStyle}
                             >
-                                <option value="Textbook">Textbook</option>
-                                <option value="Class">Class</option>
-                                <option value="School">School</option>
+                                <option value="Textbook" className='text-black'>Textbook</option>
+                                <option value="Class" className='text-black'>Class</option>
+                                <option value="School" className='text-black'>School</option>
                             </select>
-                            <input
+                            <input className='text-white'
                                 type="text"
                                 placeholder="Search..."
                                 value={searchTerm}
@@ -156,6 +156,8 @@ const formStyle = {
 };
 
 const selectStyle = {
+    borderColor: 'oklch(27.7% 0.046 192.524)',
+    textColor: 'white',
     backgroundColor: 'rgba(0,95,90, .2)',
     padding: '10px',
     marginRight: '10px',
@@ -165,6 +167,7 @@ const selectStyle = {
 };
 
 const inputStyle = {
+    borderColor: 'oklch(27.7% 0.046 192.524)',
     padding: '10px',
     marginRight: '10px',
     border: '2px solid #022f2e',
