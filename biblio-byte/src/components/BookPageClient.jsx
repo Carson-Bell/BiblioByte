@@ -12,6 +12,30 @@ export default function BookPageClient({ book }) {
   const [showReview, setShowReview] = useState(false);
   const [showListing, setShowListing] = useState(false);
 
+  const handleAddToWatchlist = async (bookId) => {
+    try {
+      const res = await fetch('/api/users/watchlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // make sure cookies/auth token are included
+        body: JSON.stringify({ bookId }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Book added to your watchlist!');
+      } else {
+        alert(`Error: ${data.message || data.error}`);
+      }
+    } catch (err) {
+      console.error('Watchlist error:', err);
+      alert('Something went wrong.');
+    }
+  };
+
   return (
       <>
     <div className="flex flex-col min-h-screen">
@@ -33,9 +57,12 @@ export default function BookPageClient({ book }) {
             <span className= "text-4xl font-bold">4.5</span>/5
           </h3>
           <a>
-            <button className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
-            style={{ backgroundColor: 'rgba(11,79,74, 1)'}}>
-              Add to List
+            <button
+                onClick={() => handleAddToWatchlist(book._id)}
+                className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
+                style={{backgroundColor: 'rgba(11,79,74, 1)'}}
+            >
+              Add to Watchlist
             </button>
           </a>
           <p className="text-m text-gray-600">
@@ -44,9 +71,9 @@ export default function BookPageClient({ book }) {
         </div>
       </main>
 
- {/* Review Section */}
-  <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
-    <h2 className="text-3xl font-bold text-white mb-2">Reviews</h2>
+      {/* Review Section */}
+      <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
+        <h2 className="text-3xl font-bold text-white mb-2">Reviews</h2>
     <button
         onClick={() => setShowReview(true)}
         className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"

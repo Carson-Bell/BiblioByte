@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
+const watchlistSchema = new mongoose.Schema({
+    book: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book',
+    },
+    addedAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -30,6 +41,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg',
     },
+    watchlist: [watchlistSchema],
 });
 
 userSchema.pre('save', async function(next) {

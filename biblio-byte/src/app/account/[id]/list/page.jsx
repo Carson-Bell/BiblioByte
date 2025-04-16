@@ -1,7 +1,7 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
-function BookCard({ title, author, school }) {
+function BookCard({ title, author }) {
     return (
         <div style={bookCardStyle}>
             <div style={bookContentStyle}>
@@ -19,19 +19,24 @@ function BookCard({ title, author, school }) {
         </div>
     );
 }
+
 function Page() {
-    const [savedBooks, setSavedBooks] = useState([
-        {
-            id: 1,
-            title: "Introduction to Algorithms",
-            author: "Cormen, Leiserson, Rivest, and Stein",
-        },
-        {
-            id: 2,
-            title: "Computer Networking: A Top-Down Approach",
-            author: "Kurose and Ross"
-        }
-    ]);
+    const [savedBooks, setSavedBooks] = useState([]);
+
+    useEffect(() => {
+        const fetchWatchlist = async () => {
+            try {
+                const res = await fetch('/api/users/watchlist');
+                const data = await res.json();
+                setSavedBooks(data.books || []);
+            } catch (err) {
+                console.error('Failed to fetch watchlist:', err);
+            }
+        };
+
+        fetchWatchlist();
+    }, []);
+
 
     return (
         <div style={pageStyle}>
@@ -74,8 +79,8 @@ const bookCardStyle = {
 };
 
 const bookContentStyle = {
-    flex: 1,
-    marginRight: '20px'
+    flex: '1',
+    marginRight: '20px',
 };
 
 const titleStyle = {
