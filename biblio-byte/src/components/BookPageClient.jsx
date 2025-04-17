@@ -8,7 +8,7 @@ import Listing from "./Listing.jsx";
 
 import React, {useState} from "react";
 
-export default function BookPageClient({ book, reviews }) {
+export default function BookPageClient({ book, reviews, finds }) {
   const [showReview, setShowReview] = useState(false);
   const [showListing, setShowListing] = useState(false);
 
@@ -119,30 +119,29 @@ export default function BookPageClient({ book, reviews }) {
             >
               Add Find
             </button>
-            <Card className="bg-white p-4 shadow-md w-full">
 
-              <div>
-                <h2 className="text-lg font-bold text-gray-800">Heading</h2>
-                <p className="text-sm font-bold text-gray-700"> User</p>
-                <div>
-                  <p className="text-sm text-gray-600">
-                    Here where I found the book.
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-    <Card className="bg-white p-4 mt-4 shadow-md w-full">
-        <div>
-          <h2 className="text-lg font-bold text-gray-800">Heading</h2>
-          <p className="text-sm font-bold text-gray-700">  User</p>
-          <div>
-            <p className="text-sm text-gray-600">
-              Here where I found the book.
-            </p>
-          </div>
-        </div>
-    </Card>
+            {finds && finds.length > 0 ? (
+                <ul className="space-y-4 mt-4">
+                  {finds.map((find) => (
+                      <li key={find._id}>
+                        <Card className="bg-white p-4 shadow-md w-full">
+                          <div>
+                            <h2 className="text-lg font-bold text-gray-800">{find.heading || ''}</h2>
+                            <p className="text-sm font-bold text-gray-700">{find.name || 'User'}</p>
+                            <div>
+                              <p className="text-sm text-gray-600">{find.comment || 'No description available'}</p>
+                            </div>
+                            {find.url && (
+                                <a href={find.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Visit Link</a>
+                            )}
+                          </div>
+                        </Card>
+                      </li>
+                  ))}
+                </ul>
+            ) : (
+                <p className="text-gray-600 italic mb-4">No finds yet</p>
+            )}
   </section>
 
       {/* Footer */}

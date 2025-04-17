@@ -15,7 +15,9 @@ export default function Home() {
 
     const handleSearch = async (event) => {
         event.preventDefault();
-        if (!searchTerm.trim()) return;
+        if (!searchTerm.trim()) { // if nothing entered
+            router.push('/search');
+        }
 
         router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
     };

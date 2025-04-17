@@ -14,16 +14,13 @@ export default function Home() {
 
   useEffect(() => {
       const fetchBooks =  async () => {
-          if (!searchTerm) return;
-
           try {
-              const res = await fetch('/api/books', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ searchType, searchTerm }),
-              });
+              let res;
+              if (!searchTerm) {
+                  res = await fetch('/api/books');
+              } else {
+                  res = await fetch(`/api/books?searchTerm=${encodeURIComponent(searchTerm)}`);
+              }
 
               const data = await res.json();
               setBooks(data);

@@ -97,7 +97,7 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
+            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 sm:p-4 flex items-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
                 <Link href="/" className="flex items-center gap-2">
                     <Image
                         src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg"

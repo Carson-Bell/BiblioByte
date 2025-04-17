@@ -1,12 +1,24 @@
 import Book from "../../../models/Book.js";
 import connectMongoDB from "../../../../config/mongodb.ts";
 
-export async function GET() {
+export async function GET(req) {
     await connectMongoDB();
 
     try {
-        const allBooks = await Book.find();
-        return new Response(JSON.stringify(allBooks), {
+        const { searchParams } = new URL(req.url);
+        const searchTerm = searchParams.get('searchTerm');
+
+        let books;
+
+        if (!searchTerm) { // if no search term
+            books = await Book.find();
+        } else {
+            books = await Book.find({
+                title: { $regex: searchTerm, $options: 'i' },
+            });
+        }
+
+        return new Response(JSON.stringify(books), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
