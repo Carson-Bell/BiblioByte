@@ -27,5 +27,6 @@ export default async function Page({ params }) {
         <>
             <BookPageClient book={book} reviews={book.reviews || []} />
         </>
+
     );
 }

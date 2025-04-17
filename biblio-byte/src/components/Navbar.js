@@ -8,87 +8,16 @@ import { useRouter } from "next/navigation";
 
 export default function Navbar() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchType, setSearchType] = useState('Textbook');
-    const router = useRouter(); // Initialize the router
-    const [user, setUser] = useState(null);
-    const [loggingOut, setLoggingOut] = useState(false);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await fetch('/api/users/me', {
-                    credentials: 'include',
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    setUser(data);
-                }
-            } catch (err) {
-                console.error('Failed to load user:', err);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault(); // Prevent the default form submission
-        if (!searchTerm.trim()) return;
-
-        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
-    }
-    const handleInputChange = (e) => {
-        setSearchQuery(e.target.value); // Update the search query state
-    };
-
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
-    const [userProfile, setUserProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const router = useRouter();
 
-
-    useEffect(() => {
-        async function checkAuthStatus() {
-            try {
-                const res = await fetch('/api/auth/status', {
-                    credentials: 'include' // ensures the token cookie is sent
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setAuthenticated(data.authenticated);
-                    setUserProfile(data.user);
-                } else {
-                    setAuthenticated(false);
-                }
-            } catch (error) {
-                console.error('Error checking auth status:', error);
-                setAuthenticated(false);
-            } finally {
-                setLoading(false);
-            }
-        }
-        checkAuthStatus();
-    }, []);
-
-    const handleSignOut = async () => {
-        try {
-            setLoggingOut(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            const res = await fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include'
-            });
-            if (res.ok) {
-                setAuthenticated(false);
-                setUserProfile(null);
-                window.location.href = '/';
-            }
-        } catch (error) {
-            console.error('Error signing out:', error);
-        }
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (!searchTerm.trim()) return;
+        router.push(`/search?term=${encodeURIComponent(searchTerm)}`);
     };
 
     const toggleDropdown = () => {
@@ -97,58 +26,32 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 flex items-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
-                <Link href="/" className="flex items-center gap-2">
+            <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-2 sm:p-4 flex items-center justify-between" style={{ backgroundColor: 'rgba(11,79,74,1)' }}>
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2 flex-shrink-0">
                     <Image
                         src="https://www.clker.com/cliparts/o/Y/Q/2/s/1/white-book-reading.svg"
                         alt="Logo"
-                        width={50}
-                        height={50}
+                        width={40}
+                        height={40}
+                        className="sm:w-10 sm:h-10"
                     />
-                    <span className="text-3xl font-semibold hover:font-bold text-white">
-                        BiblioByte
-                    </span>
+                    <span className="text-lg sm:text-2xl font-semibold text-white">BiblioByte</span>
                 </Link>
-                <div className="ml-8 flex-auto">
+
+                {/* Search Bar */}
+                <div className="ml-4 flex-grow max-w-md mr-2">
                     <form onSubmit={handleSearchSubmit}>
                         <input
                             type="text"
-                            placeholder="Textbook"
+                            placeholder="Search..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-xs px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
+                            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                         />
                     </form>
                 </div>
-                <div className="ml-auto flex gap-4">
-                    {authenticated ? (
-                        // profile dropdown
-                        <>
-                            <div onClick={toggleDropdown} className="relative">
-                                {user?.profilePic ? (
-                                    <img
-                                        src={user.profilePic}
-                                        alt="Profile"
-                                        style={{
-                                            height: '35px',
-                                            width: '35px',
-                                            borderRadius: '50%',
-                                            objectFit: 'cover',
-                                            border: '1px solid #ccc',
-                                            cursor: 'pointer'
-                                        }}
-                                    />
-                                ) : (
-                                    <p>Profile</p> // fallback if user hasn’t loaded yet
-                                )}
 
-                                {loggingOut && (
-                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
-                                        <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
-                                            <p className="text-lg font-semibold text-white">Logging you out...</p>
-                                        </div>
-                                    </div>
-                                )}
 
                                 {dropdownOpen && (
                                     <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
@@ -160,8 +63,8 @@ export default function Navbar() {
                                 )}
                             </div>
                         </>
+
                     ) : (
-                        // login/signup buttons
                         <>
                             <button
                                 onClick={() => setShowLogin(true)}
@@ -180,6 +83,7 @@ export default function Navbar() {
                 </div>
             </header>
 
+            {/* Modals */}
             <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
             <SignupModal show={showSignup} onClose={() => setShowSignup(false)} />
         </>
