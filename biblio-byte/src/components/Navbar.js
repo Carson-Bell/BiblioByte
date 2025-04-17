@@ -153,6 +153,7 @@ export default function Navbar() {
                                 {dropdownOpen && (
                                     <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
                                         <Link href="http://localhost:3000/account/123" className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                        <Link href="http://localhost:3000/account/123/list" className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
                                         <Link href="http://localhost:3000/account/123/listings" className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
                                         <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
                                     </div>
