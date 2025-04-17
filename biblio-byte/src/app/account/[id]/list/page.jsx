@@ -1,14 +1,26 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from "react";
+import Link from "next/link.js";
+import Card from "../../../../components/Card.js";
 
-function BookCard({ title, author, onDelete, bookId }) {
+function BookCard({ title, author, onDelete, book, bookId }) {
     return (
-        <div style={bookCardStyle}>
-            <div style={bookContentStyle}>
-                <h3 style={titleStyle}>{title}</h3>
-                <p><strong>Author:</strong> {author}</p>
-            </div>
-            <div>
+            <div style={innerCardStyle}>
+                <div style={leftContentStyle}>
+                    {book.thumbnail && (
+                        <img
+                            src={book.thumbnail}
+                            alt={`Cover of ${book.title}`}
+                            style={bookImageStyle}
+                        />
+                    )}
+                    <div style={bookContentStyle}>
+                        <Link href={`/search/${book._id}`} passHref>
+                            <h2 style={titleStyle}>Title: {book.title}</h2>
+                        </Link>
+                        <p style={authorStyle}>Author: {book.author}</p>
+                    </div>
+                </div>
                 <button
                     style={deleteButtonStyle}
                     onClick={() => onDelete(bookId)}
@@ -16,9 +28,11 @@ function BookCard({ title, author, onDelete, bookId }) {
                     X
                 </button>
             </div>
-        </div>
+
     );
 }
+
+
 
 function Page() {
     const [savedBooks, setSavedBooks] = useState([]);
@@ -57,6 +71,9 @@ function Page() {
         fetchWatchlist();
     }, []);
 
+    const handleDelete = (id) => {
+        setSavedBooks(prev => prev.filter(book => book.id !== id));
+    };
 
     return (
         <div style={pageStyle}>
@@ -66,6 +83,7 @@ function Page() {
                     <BookCard
                         key={book._id}
                         bookId={book._id}
+                        book={book} {/* merged from bri, but is this needed? */}
                         title={book.title}
                         author={book.author}
                         onDelete={handleDelete}
@@ -76,6 +94,7 @@ function Page() {
     );
 
 }
+
 const pageStyle = {
     height: '100vh',
     alignItems: 'center',
@@ -89,25 +108,58 @@ const sectionStyle = {
     marginBottom: '40px'
 };
 
-const bookCardStyle = {
-    backgroundColor: '#fff',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+const outerCardStyle = {
+    backgroundColor: 'white',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
     padding: '15px',
     borderRadius: '8px',
     marginBottom: '10px',
+    zIndex: 1,
+};
+
+const innerCardStyle = {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'white',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    padding: '15px',
+    borderRadius: '8px',
+    marginBottom: '10px',
+    zIndex: 1,
+};
+
+const leftContentStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+};
+
+const bookImageStyle = {
+    width: '60px',
+    height: '90px',
+    objectFit: 'cover',
+    borderRadius: '4px',
 };
 
 const bookContentStyle = {
-    flex: '1',
-    marginRight: '20px',
+    lineHeight: '1.3',
 };
 
 const titleStyle = {
-    fontWeight: 'bold',
-    marginBottom: '5px'
+    fontSize: '1rem',
+    fontWeight: '600',
+    margin: 0,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    color: 'black',
+};
+
+const authorStyle = {
+    fontSize: '0.95rem',
+    margin: '6px 0 0',
+    color: '#333',
 };
 
 const deleteButtonStyle = {
@@ -115,9 +167,10 @@ const deleteButtonStyle = {
     color: 'white',
     border: 'none',
     padding: '8px 12px',
-    borderRadius: '4px',
+    borderRadius: '6px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease'
+    fontSize: '1.1rem',
 };
+
 
 export default Page;
