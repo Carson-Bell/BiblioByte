@@ -74,3 +74,36 @@ export async function GET(req) {
         headers: { 'Content-Type': 'application/json' },
     });
 }
+
+export async function DELETE(req) {
+    const { valid, decoded, error } = auth(req);
+    if (!valid) {
+        return new Response(JSON.stringify({ error }), { status: 401 });
+    }
+
+    let parsed;
+    try {
+        parsed = await req.json();
+    } catch (err) {
+        return new Response(JSON.stringify({ error: 'Missing or invalid JSON body' }), { status: 400 });
+    }
+
+    const bookId = parsed.bookId;
+
+    if (!bookId) {
+        return new Response(JSON.stringify({ error: 'Missing bookId' }), { status: 400 });
+    }
+
+    await connectMongoDB();
+
+    const user = await User.findById(decoded.id);
+
+    user.watchlist = user.watchlist.filter(entry => entry.book.toString() !== bookId);
+
+    await user.save();
+
+    return new Response(JSON.stringify({ message: 'Book removed from watchlist' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
+}

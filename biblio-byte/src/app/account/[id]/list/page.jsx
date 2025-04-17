@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-function BookCard({ title, author }) {
+function BookCard({ title, author, onDelete, bookId }) {
     return (
         <div style={bookCardStyle}>
             <div style={bookContentStyle}>
@@ -11,7 +11,7 @@ function BookCard({ title, author }) {
             <div>
                 <button
                     style={deleteButtonStyle}
-                    onClick={() => onDelete(id)}
+                    onClick={() => onDelete(bookId)}
                 >
                     X
                 </button>
@@ -22,6 +22,26 @@ function BookCard({ title, author }) {
 
 function Page() {
     const [savedBooks, setSavedBooks] = useState([]);
+
+    const handleDelete = async (bookId) => {
+        try {
+            const res = await fetch('/api/users/watchlist', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ bookId }),
+            });
+
+            if (res.ok) {
+                setSavedBooks(prev => prev.filter(book => book._id !== bookId));
+            } else {
+                console.error('Failed to delete book: ', await res.json());
+            }
+        } catch (err) {
+            console.error('Error deleting book:', err);
+        }
+    };
 
     useEffect(() => {
         const fetchWatchlist = async () => {
@@ -44,9 +64,11 @@ function Page() {
                 <h1 className="text-3xl font-bold text-white mb-2" align='center'>Saved Books</h1>
                 {savedBooks.map(book => (
                     <BookCard
-                        key={book.id}
+                        key={book._id}
+                        bookId={book._id}
                         title={book.title}
                         author={book.author}
+                        onDelete={handleDelete}
                     />
                 ))}
             </div>
