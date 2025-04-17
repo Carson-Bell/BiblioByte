@@ -71,10 +71,6 @@ function Page() {
         fetchWatchlist();
     }, []);
 
-    const handleDelete = (id) => {
-        setSavedBooks(prev => prev.filter(book => book.id !== id));
-    };
-
     return (
         <div style={pageStyle}>
             <div style={sectionStyle}>
@@ -83,7 +79,7 @@ function Page() {
                     <BookCard
                         key={book._id}
                         bookId={book._id}
-                        book={book} {/* merged from bri, but is this needed? */}
+                        book={book}
                         title={book.title}
                         author={book.author}
                         onDelete={handleDelete}
