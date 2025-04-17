@@ -9,11 +9,11 @@ export async function POST(req) {
         return new Response(JSON.stringify({ message: error }), { status: 401 });
     }
 
-    const { bookId, title, description, rating } = await req.json();
+    const { bookId, file, url } = await req.json();
 
-    console.log("Incoming data:", { bookId, title, description, rating }); // jen debug
+    console.log("Incoming data:", { bookId, file, url }); // Debugging
 
-    if (!bookId || !title || !description || !rating) {
+    if (!bookId || (!file && !url)) {
         return new Response(JSON.stringify({ message: 'Missing required fields' }), { status: 400 });
     }
 
@@ -30,23 +30,29 @@ export async function POST(req) {
             return new Response(JSON.stringify({ message: 'Book not found' }), { status: 404 });
         }
 
-        const review = {
-            name: user.name , // Use user's name or email if name is not available
-            title: title,
-            rating,
-            comment: description
+        const find = {
+            name: user.name, // Use user's name or email if name is not available
+            file: file || null, // File path or URL
+            url: url || null,  // URL if provided
         };
-        console.log("Review object:", review);
+        console.log("Find object:", find);
 
-
-        book.reviews.push(review);
+        if (!book.finds) {
+            book.finds = [];
+        }
+        book.finds.push(find);
+        console.log("Book ID:", bookId);
         await book.save();
-        console.log("Review added successfully");
+        console.log("Find added successfully");
+        console.log("Book ID:", bookId);
+        console.log("Decoded user ID:", decoded.id);
+console.log("User found:", user);
+console.log("Book found:", book);
+console.log("Find object to add:", find);
 
-
-        return new Response(JSON.stringify({ message: 'Review added successfully' }), { status: 201 });
+        return new Response(JSON.stringify({ message: 'Find added successfully' }), { status: 201 });
     } catch (error) {
-        console.error('Error adding review:', error);
+        console.error('Error adding find:', error);
         return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
     }
 }
