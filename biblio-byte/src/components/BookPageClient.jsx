@@ -63,7 +63,7 @@ export default function BookPageClient({ book, reviews, finds }) {
                 className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                 style={{backgroundColor: 'rgba(11,79,74, 1)'}}
             >
-              Add to Watchlist
+              Add to List
             </button>
           </a>
           <p className="text-m text-gray-600">
