@@ -102,7 +102,10 @@ export default function BookPageClient({ book, reviews, finds }) {
                   ))}
                 </ul>
             ) : (
-                <p className="text-gray-600 italic mb-4">No reviews yet.</p>
+                <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                  <p className="text-2xl  text-gray-200 mb-2">No reviews yet</p>
+                  <p className="text-md text-gray-400 italic font-light">Be the first to share a review for this book!</p>
+                </div>
             )}
           </section>
 
@@ -140,7 +143,10 @@ export default function BookPageClient({ book, reviews, finds }) {
                   ))}
                 </ul>
             ) : (
-                <p className="text-gray-600 italic mb-4">No finds yet</p>
+                <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                  <p className="text-2xl  text-gray-200 mb-2">No finds yet</p>
+                  <p className="text-md text-gray-400 italic font-light">Be the first to share a find for this book!</p>
+                </div>
             )}
   </section>
 
