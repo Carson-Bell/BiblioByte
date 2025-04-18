@@ -75,16 +75,23 @@ function Page() {
         <div style={pageStyle}>
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2" align='center'>Saved Books</h1>
-                {savedBooks.map(book => (
-                    <BookCard
-                        key={book._id}
-                        bookId={book._id}
-                        book={book}
-                        title={book.title}
-                        author={book.author}
-                        onDelete={handleDelete}
-                    />
-                ))}
+                {savedBooks.length === 0 ? (
+                    <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                        <p className="text-2xl text-gray-200 mb-2">No saved books</p>
+                        <p className="text-md text-gray-400 italic font-light">Save some books and come back later!</p>
+                    </div>
+                ) : (
+                    savedBooks.map(book => (
+                        <BookCard
+                            key={book._id}
+                            bookId={book._id}
+                            book={book}
+                            title={book.title}
+                            author={book.author}
+                            onDelete={handleDelete}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );
