@@ -52,6 +52,11 @@ const bookSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    description: {
+        type: String,
+        required: false,
+        trim: true,
+    },
     className: {
         type: String,
         required: false,

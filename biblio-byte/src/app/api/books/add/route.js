@@ -4,7 +4,7 @@ import Book from '../../../../models/Book';
 
 export async function POST(req) {
     try {
-        const { title, author, description, link } = await req.json();
+        const { title, author, description: providedDescription, link } = await req.json();
 
         await connectMongoDB();
 
@@ -13,8 +13,10 @@ export async function POST(req) {
         );
         const googleData = await googleRes.json();
 
-        const thumbnail =
-            googleData.items?.[0]?.volumeInfo?.imageLinks?.thumbnail || '';
+        const bookInfo = googleData.items?.[0]?.volumeInfo || {};
+
+        const thumbnail = bookInfo.imageLinks?.thumbnail || '';
+        const description = providedDescription || bookInfo.description || 'No description available';
 
         const newBook = await Book.create({
             title,

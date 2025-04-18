@@ -32,14 +32,10 @@ export default function Navbar() {
     }, []);
 
     const handleSearchSubmit = (e) => {
-        e.preventDefault(); // Prevent the default form submission
-        if (!searchTerm.trim()) return;
-
-        router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
+        e.preventDefault();
+        const query = searchTerm.trim() || '';
+        router.push(`/search?term=${encodeURIComponent(query)}&type=${searchType}`);
     }
-    const handleInputChange = (e) => {
-        setSearchQuery(e.target.value); // Update the search query state
-    };
 
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
