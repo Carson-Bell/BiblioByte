@@ -13,12 +13,78 @@ export default function Page() {
     const [profilePic, setProfilePic] = useState('https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg');
     const [authenticated, setAuthenticated] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
+    // just for left profile bar
+    const [displayFullName, setDisplayFullName] = useState('');
+    const [displaySchool, setDisplaySchool] = useState('');
 
-    const handleUpdate = (event) => {
+    // validation states
+    const [emailError, setEmailError] = useState(false);
+    const [confirmEmailError, setConfirmEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+
+    const handleUpdate = async (event) => {
         event.preventDefault();
-        // Implement update logic here
-        console.log(`Profile updated for ${email}`);
+
+        let hasError = false;
+
+        if (email.trim() === '') {
+            setEmailError(true);
+            hasError = true;
+        } else {
+            setEmailError(false);
+        }
+
+        if (confirmEmail.trim() === '' || email !== confirmEmail) {
+            setConfirmEmailError(true);
+            hasError = true;
+        } else {
+            setConfirmEmailError(false);
+        }
+
+        if (password.trim() === '') {
+            setPasswordError(true);
+            hasError = true;
+        } else {
+            setPasswordError(false);
+        }
+
+        if (hasError) {
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/users/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    fullName,
+                    email,
+                    school,
+                    password,
+                    profilePic
+                })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setDisplayFullName(fullName);
+                setDisplaySchool(school);
+                setPassword('');
+                setConfirmEmail('');
+                alert('Profile updated successfully!');
+            } else {
+                alert('Update failed: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('An unexpected error occurred.');
+        }
     };
+
 
     const handleImageChange = async (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -72,6 +138,10 @@ export default function Page() {
                 setSchool(data.school || '');
                 setPassword('');
                 setProfilePic(data.profilePic || 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg');
+
+                // for left profile card
+                setDisplayFullName(data.fullName || '');
+                setDisplaySchool(data.school || '');
             }
         }
         fetchProfile();
@@ -80,18 +150,18 @@ export default function Page() {
 
     return (
         <>
-            <Head>
-                <title>Account</title>
-            </Head>
-            <div style={pageStyle}>
-                <div style={cardStyle} className="card1 welcome">
-                    <h1 style={{ fontSize: '24px' }}>Welcome back!</h1>
-                    {/* this was previously <div> and i made it <img>*/}
-                    <img
-                        src={profilePic}
-                        alt="Profile"
-                        style={{
-                            height: '200px',
+        <Head>
+            <title>Account</title>
+        </Head>
+    <div style={pageStyle}>
+        <div style={cardStyle} className="card1 welcome">
+            <h1 style={{fontSize: '24px'}}>Welcome back!</h1>
+            {/* this was previously <div> and i made it <img>*/}
+            <img
+                src={profilePic}
+                alt="Profile"
+                style={{
+                    height: '200px',
                             width: '200px',
                             objectFit: 'cover',
                             borderRadius: '50%',
@@ -103,8 +173,8 @@ export default function Page() {
                     <button style={buttonStyle} onClick={() => document.querySelector('input[type="file"]').click()} >
                         Upload Image
                     </button>
-                    <p style={{ fontSize: '20px', padding:'10px'}}><strong>{fullName}</strong></p>
-                    <p>{school}</p>
+                    <p style={{ fontSize: '20px', padding:'10px'}}><strong>{displayFullName}</strong></p>
+                    <p>{displaySchool}</p>
                     {/*<button style={buttonStyle} onClick={handleSignOut}>Logout</button>*/}
                 </div>
                 <div style={{...cardStyle, ...card2Style}} className="card2 edit-profile">
@@ -131,8 +201,14 @@ export default function Page() {
                         value={confirmEmail}
                         onChange={(e) => setConfirmEmail(e.target.value)}
                         className="text-black"
-                        style={inputStyle}
+                        style={{
+                            ...inputStyle,
+                            borderColor: confirmEmailError ? 'red' : inputStyle.borderColor
+                        }}
                     />
+                    {confirmEmailError && (
+                        <div style={errorTextStyle}>Emails must match</div>
+                    )}
                     <input
                         type="text"
                         placeholder="School"
@@ -147,15 +223,20 @@ export default function Page() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="text-black"
-                        style={inputStyle}
+                        style={{
+                            ...inputStyle,
+                            borderColor: passwordError ? 'red' : inputStyle.borderColor
+                        }}
                     />
+                    {passwordError && (
+                        <div style={errorTextStyle}>Password required</div>
+                    )}
                     <button onClick={handleUpdate} style={buttonStyle}>Update</button>
                 </div>
             </div>
         </>
     );
 }
-
 
 const pageStyle = {
     display: 'flex',
@@ -212,11 +293,18 @@ const buttonStyle = {
 };
 
 const inputStyle = {
-    borderColor: 'oklch(27.7% 0.046 192.524)',
     backgroundColor: 'white',
     width: '75%',
     padding: '10px',
     marginTop: '10px',
-    border: '1px solid #ccc',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: '#ccc',
     borderRadius: '5px',
+};
+
+const errorTextStyle = {
+    color: 'red',
+    fontSize: '12px',
+    marginTop: '5px',
 };

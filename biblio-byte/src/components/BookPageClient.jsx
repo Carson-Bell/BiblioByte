@@ -43,7 +43,7 @@ export default function BookPageClient({ book, reviews, finds }) {
           <BookPageHeader/>
 
       {/* Main Content */}
-      <main className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
+      <main id="info" className="flex-grow w-full flex flex-col mt-15 sm:flex-row items-center sm:items-start gap-8 bg-gray-100 p-8 sm:p-16 shadow-lg">
         {/* Image on the Left */}
         <div className="flex-shrink-0">
           <img src={book.thumbnail} alt={book.title} className="rounded" />
@@ -73,7 +73,7 @@ export default function BookPageClient({ book, reviews, finds }) {
 
           {/* Review Section */}
           <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
-            <h2 className="text-3xl font-bold text-white mb-2">Reviews</h2>
+            <h2 id="reviews" className="text-3xl font-bold text-white mb-2">Reviews</h2>
             <button
                 onClick={() => setShowReview(true)}
                 className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
@@ -108,7 +108,7 @@ export default function BookPageClient({ book, reviews, finds }) {
 
 
           {/* Find Section */}
-          <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
+          <section id="finds" className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
             <h2 className="text-3xl font-bold text-white mb-2">Finds</h2>
             <button
                 onClick={() => setShowListing(true)}
