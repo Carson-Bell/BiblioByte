@@ -2,6 +2,7 @@ import connectMongoDB from '../../../../config/mongodb';
 import Book from '../../../models/Book';
 import User from '../../../models/User'; // Import the User model
 import auth from '../../../middleware/auth';
+import mongoose from 'mongoose';
 
 export async function POST(req) {
     const { valid, error, decoded } = auth(req);
@@ -30,21 +31,20 @@ export async function POST(req) {
             return new Response(JSON.stringify({ message: 'Book not found' }), { status: 404 });
         }
 
-        const review = {
-            name: user.name , // Use user's name or email if name is not available
+        const newReview = {
+            _id: new mongoose.Types.ObjectId(), // manually creating id this time
+            name: user.name,
             title: title,
-            rating,
-            comment: description
+            rating: rating,
+            comment: description,
         };
-        console.log("Review object:", review);
 
-
-        book.reviews.push(review);
+        book.reviews.push(newReview);
         await book.save();
-        console.log("Review added successfully");
 
+        console.log("Review added successfully:", newReview);
 
-        return new Response(JSON.stringify({ message: 'Review added successfully' }), { status: 201 });
+        return new Response(JSON.stringify(newReview), { status: 201 });
     } catch (error) {
         console.error('Error adding review:', error);
         return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-export default function Review({ show, onClose, bookId }) {
+export default function Review({ show, onClose, bookId, onReviewAdded }) {
 
     const [formData, setFormData] = useState({
         title: '',
@@ -55,11 +55,24 @@ export default function Review({ show, onClose, bookId }) {
             });
 
             if (response.ok) {
-                alert('Review submitted!');
+                const createdReview = await response.json();
+                if (onReviewAdded) {
+                    onReviewAdded({
+                        _id: createdReview._id,
+                        name: createdReview.name,
+                        rating: createdReview.rating,
+                        comment: createdReview.comment
+                    });
+                }
+                alert("Review added successfully!");
+
+                setFormData({
+                    title: '',
+                    description: '',
+                    rating: 1
+                });
+
                 onClose();
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.message}`);
             }
         } catch (error) {
             console.error('Error submitting review:', error);

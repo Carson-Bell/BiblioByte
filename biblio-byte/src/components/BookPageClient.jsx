@@ -11,6 +11,7 @@ import React, {useState} from "react";
 export default function BookPageClient({ book, reviews, finds }) {
   const [showReview, setShowReview] = useState(false);
   const [showListing, setShowListing] = useState(false);
+  const [reviewsState, setReviewsState] = useState(reviews || []);
 
   const handleAddToWatchlist = async (bookId) => {
     try {
@@ -82,9 +83,9 @@ export default function BookPageClient({ book, reviews, finds }) {
               Add Review
             </button>
 
-            {reviews && reviews.length > 0 ? (
+            {reviewsState && reviewsState.length > 0 ? (
                 <ul className="space-y-4 mt-4">
-                  {reviews.map((review) => (
+                  {reviewsState.map((review) => (
                       <li key={review._id}>
                         <Card className="bg-white p-4 shadow-md w-full">
                           <div className="flex items-center gap-4">
@@ -158,8 +159,20 @@ export default function BookPageClient({ book, reviews, finds }) {
       </footer>
     </div>
 
-        <Review show={showReview} onClose={() => setShowReview(false)}
-                bookId={book._id.toString()}/>
+        <Review
+            show={showReview}
+            onClose={() => setShowReview(false)}
+            bookId={book._id.toString()}
+            onReviewAdded={(newReview) => {
+              const formattedReview = {
+                _id: newReview._id,
+                name: newReview.name,
+                comment: newReview.comment,
+                rating: newReview.rating,
+              };
+              setReviewsState((prev) => [...prev, formattedReview]);
+            }}
+        />
         <Listing show={showListing} onClose={() => setShowListing(false)}
                 bookId={book._id.toString()}/>
       </>
