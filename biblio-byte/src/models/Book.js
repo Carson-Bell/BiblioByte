@@ -14,7 +14,7 @@ const reviewSchema = new mongoose.Schema({
     rating: {
         type: Number, // Rating out of 5
         required: true,
-        min: 1,
+        min: 0.5,
         max: 5,
     },
     comment: {
@@ -37,6 +37,11 @@ const findsSchema = new mongoose.Schema({
     url: {
         type: String, // URL to the find
         required: false,
+        trim: true,
+    },
+    description: {
+        type: String,
+        required: true,
         trim: true,
     }
 });

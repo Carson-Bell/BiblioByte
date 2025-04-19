@@ -2,12 +2,13 @@
 
 import React, { useRef, useState } from 'react';
 
-function Listing({ show, onClose, bookId }) {
+function Listing({ show, onClose, bookId, onFindAdded }) {
     // State to manage file, link, and terms acceptance
     const fileInputRef = useRef(null);
     const [file, setFile] = useState(null);
     const [link, setLink] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [description, setDescription] = useState('');
 
     // Handling file input changes
     const handleFileChange = (event) => {
@@ -56,6 +57,7 @@ function Listing({ show, onClose, bookId }) {
                 bookId,
                 file: file ? file.name : null, // Send file name if file exists
                 url: link || null, // Send URL if provided
+                description: description || '',
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -65,11 +67,19 @@ function Listing({ show, onClose, bookId }) {
         if (!response.ok) {
             throw new Error('Failed to submit listing');
         }
+
+            const createdFind = await response.json();
+
+            if (onFindAdded) {
+                onFindAdded(createdFind);
+            }
+
         alert('Listing submitted successfully!');
             //clear the form inputs
             setFile(null); // Clear the file state
             setLink(''); // Clear the link input
             setTermsAccepted(false);
+            setDescription('');
             fileInputRef.current.value = ''; // Reset file input
             onClose(); // Optionally close the modal/dialog
         } catch (error) {
@@ -93,6 +103,13 @@ function Listing({ show, onClose, bookId }) {
                     className="flex flex-col gap-3"
                     onSubmit={handleSubmit}
                 >
+                    {/* logic to show the uploaded file i think */}
+                    {file && (
+                        <div className="mb-2 text-black">
+                            Selected File: <span className="font-semibold">{file.name}</span>
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="button"
@@ -110,15 +127,27 @@ function Listing({ show, onClose, bookId }) {
                     </div>
                     <div>
                         <label className="block font-semibold mb-2">
-                            Or Link
+                            Or Enter a Link
                         </label>
                         <input
                             type="text"
-                            placeholder="Enter a link"
+                            placeholder="Link"
                             value={link}
                             onChange={handleLinkChange}
                             className="w-full border px-2 py-1 rounded text-black"
                         />
+                    </div>
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Description
+                        </label>
+                        <textarea
+                            placeholder="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="w-full border px-2 py-1 rounded text-black"
+                            rows="3"
+                        ></textarea>
                     </div>
                     <div>
                         <label className="block font-semibold mb-2">
