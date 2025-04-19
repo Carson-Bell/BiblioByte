@@ -63,7 +63,6 @@ export default function Page() {
                     fullName,
                     email,
                     school,
-                    password,
                     profilePic
                 })
             });

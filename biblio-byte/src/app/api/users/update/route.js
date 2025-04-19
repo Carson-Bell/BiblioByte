@@ -8,7 +8,7 @@ export async function POST(req) {
         return new Response(JSON.stringify({ error }), { status: 401 });
     }
 
-    const { fullName, email, school, password, profilePic } = await req.json();
+    const { fullName, email, school, profilePic } = await req.json();
 
     await connectMongoDB();
 
@@ -19,7 +19,6 @@ export async function POST(req) {
                 name: fullName,
                 email,
                 school,
-                ...(password && { password }),
                 profilePic
             },
             { new: true }
