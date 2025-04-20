@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
@@ -136,7 +136,7 @@ export default function Navbar() {
                     {authenticated ? (
                         // profile dropdown
                         <>
-                            <div onClick={toggleDropdown} className="relative">
+                            <div onClick={toggleDropdown} className="relative z-50">
                                 {user?.profilePic ? (
                                     <img
                                         src={user.profilePic}
@@ -163,13 +163,42 @@ export default function Navbar() {
                                 )}
 
                                 {dropdownOpen && (
-                                    <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
-                                        <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
-                                        <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
-                                        <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
-                                        <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
+                                    <div
+                                        className="fixed inset-x-3 z-40"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        <div
+                                            className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <Link
+                                                href={`/account/${user?._id}`}
+                                                className="block px-4 py-2 text-black hover:bg-gray-200"
+                                            >
+                                                Profile
+                                            </Link>
+                                            <Link
+                                                href={`/account/${user?._id}/list`}
+                                                className="block px-4 py-2 text-black hover:bg-gray-200"
+                                            >
+                                                My List
+                                            </Link>
+                                            <Link
+                                                href={`/account/${user?._id}/listings`}
+                                                className="block px-4 py-2 text-black hover:bg-gray-200"
+                                            >
+                                                My Reviews/Documents
+                                            </Link>
+                                            <button
+                                                onClick={handleSignOut}
+                                                className="w-full text-left px-4 py-2 text-black hover:bg-gray-200"
+                                            >
+                                                Sign Out
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
+
                             </div>
                         </>
                     ) : (
