@@ -2,12 +2,13 @@
 
 import React, { useRef, useState } from 'react';
 
-function Listing({ show, onClose }) {
+function Listing({ show, onClose, bookId, onFindAdded }) {
     // State to manage file, link, and terms acceptance
     const fileInputRef = useRef(null);
     const [file, setFile] = useState(null);
     const [link, setLink] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [description, setDescription] = useState('');
 
     // Handling file input changes
     const handleFileChange = (event) => {
@@ -39,13 +40,46 @@ function Listing({ show, onClose }) {
 
         // Simulate API call with a promise
         try {
-            // Simulate API call with a promise
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulating network request
-            alert('Listing submitted successfully!');
+            // Create a FormData object to handle file uploads
+        const formData = new FormData();
+        formData.append('bookId', bookId); // Pass the bookId
+        if (file) {
+            formData.append('file', file); // Add the file if provided
+        }
+        if (link) {
+            formData.append('url', link); // Add the link if provided
+        }
+
+        // Make the API call
+        const response = await fetch('/api/finds', {
+            method: 'POST',
+            body: JSON.stringify({
+                bookId,
+                file: file ? file.name : null, // Send file name if file exists
+                url: link || null, // Send URL if provided
+                description: description || '',
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit listing');
+        }
+
+            const createdFind = await response.json();
+
+            if (onFindAdded) {
+                onFindAdded(createdFind);
+            }
+
+        alert('Listing submitted successfully!');
             //clear the form inputs
             setFile(null); // Clear the file state
             setLink(''); // Clear the link input
             setTermsAccepted(false);
+            setDescription('');
             fileInputRef.current.value = ''; // Reset file input
             onClose(); // Optionally close the modal/dialog
         } catch (error) {
@@ -69,6 +103,13 @@ function Listing({ show, onClose }) {
                     className="flex flex-col gap-3"
                     onSubmit={handleSubmit}
                 >
+                    {/* logic to show the uploaded file i think */}
+                    {file && (
+                        <div className="mb-2 text-black">
+                            Selected File: <span className="font-semibold">{file.name}</span>
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="button"
@@ -86,15 +127,27 @@ function Listing({ show, onClose }) {
                     </div>
                     <div>
                         <label className="block font-semibold mb-2">
-                            Or Link
+                            Or Enter a Link
                         </label>
                         <input
                             type="text"
-                            placeholder="Enter a link"
+                            placeholder="Link"
                             value={link}
                             onChange={handleLinkChange}
                             className="w-full border px-2 py-1 rounded text-black"
                         />
+                    </div>
+                    <div>
+                        <label className="block font-semibold mb-2">
+                            Description
+                        </label>
+                        <textarea
+                            placeholder="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="w-full border px-2 py-1 rounded text-black"
+                            rows="3"
+                        ></textarea>
                     </div>
                     <div>
                         <label className="block font-semibold mb-2">

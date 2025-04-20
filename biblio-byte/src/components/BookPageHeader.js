@@ -19,7 +19,7 @@ export default function BookPageHeader() {
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="hover:underline">
+                        <a href="#finds" className="hover:underline">
                             Find
                         </a>
                     </li>

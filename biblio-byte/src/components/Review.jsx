@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 
-export default function Review({ show, onClose, bookId }) {
-    console.log("Review.jsx received bookId:", bookId); // debug
+export default function Review({ show, onClose, bookId, onReviewAdded }) {
 
     const [formData, setFormData] = useState({
-        name: '',
+        title: '',
         description: '',
         rating: 1
     });
@@ -29,7 +28,7 @@ export default function Review({ show, onClose, bookId }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.description || !formData.rating || !bookId) {
+        if (!formData.title || !formData.description || !formData.rating || !bookId) {
             alert("All fields are required.");
             return;
         }
@@ -56,11 +55,24 @@ export default function Review({ show, onClose, bookId }) {
             });
 
             if (response.ok) {
-                alert('Review submitted!');
+                const createdReview = await response.json();
+                if (onReviewAdded) {
+                    onReviewAdded({
+                        _id: createdReview._id,
+                        name: createdReview.name,
+                        rating: createdReview.rating,
+                        comment: createdReview.comment
+                    });
+                }
+                alert("Review added successfully!");
+
+                setFormData({
+                    title: '',
+                    description: '',
+                    rating: 1
+                });
+
                 onClose();
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.message}`);
             }
         } catch (error) {
             console.error('Error submitting review:', error);
@@ -85,13 +97,13 @@ export default function Review({ show, onClose, bookId }) {
                 >
                     <div>
                         <label className="block font-semibold mb-2">
-                            Name
+                            Title
                         </label>
                         <textarea
                             className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
-                            name="name"
-                            placeholder="Your name"
-                            value={formData.name}
+                            name="title"
+                            placeholder="Review Title"
+                            value={formData.title}
                             onChange={handleChange}
                             rows={1}
                         ></textarea>

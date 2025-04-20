@@ -23,6 +23,7 @@ export async function GET(req) {
     }
 
     return new Response(JSON.stringify({
+        _id: user._id,
         fullName: user.name,
         email: user.email,
         school: user.university,

@@ -1,10 +1,9 @@
 import connectMongoDB from '../../../../config/mongodb';
 import Book from '../../../models/Book';
 import BookPageClient from '../../../components/BookPageClient';
-import ReviewWrapper from '../../../components/ReviewWrapper';
 
-export default async function Page({ params }) {
-    const { id } = await params;
+export default async function Page({params}) {
+    const {id} = await params;
 
     await connectMongoDB();
     const book = await Book.findById(id).lean();
@@ -15,18 +14,29 @@ export default async function Page({ params }) {
 
     // convert objectId to string so no error
     book._id = book._id.toString();
-    
-        // Convert each review's _id to string (if reviews exist)
-        if (book.reviews) {
-            book.reviews = book.reviews.map((review) => ({
-                ...review,
-                _id: review._id.toString(), // Convert _id to string
-            }));
-        }    
+
+    // Convert each review's _id to string (if reviews exist)
+    if (book.reviews) {
+        book.reviews = book.reviews.map((review) => ({
+            ...review,
+            _id: review._id.toString(), // Convert _id to string
+        }));
+    }
+
+    // same but for finds
+    if (book.finds) {
+        book.finds = book.finds.map((find) => ({
+            ...find,
+            _id: find._id.toString(),
+        }));
+    }
 
     return (
         <>
-        <BookPageClient book={book} />
-    </>
+            <BookPageClient book={book}
+                            reviews={book.reviews || []}
+                            finds={book.finds || []} />
+        </>
+
     );
 }
