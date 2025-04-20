@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
-    const router = useRouter(); // Initialize the router
+    //const router = useRouter(); // Initialize the router
     const [user, setUser] = useState(null);
     const [loggingOut, setLoggingOut] = useState(false);
 
@@ -40,6 +40,8 @@ export default function Navbar() {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const router = useRouter();
 
@@ -136,6 +138,36 @@ export default function Navbar() {
                     </form>
                 </div>
 
+                <div className="ml-auto flex gap-4">
+                    {authenticated ? (
+                        // profile dropdown
+                        <>
+                            <div onClick={toggleDropdown} className="relative">
+                                {user?.profilePic ? (
+                                    <img
+                                        src={user.profilePic}
+                                        alt="Profile"
+                                        style={{
+                                            height: '35px',
+                                            width: '35px',
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            border: '1px solid #ccc',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                ) : (
+                                    <p>Profile</p> // fallback if user hasn’t loaded yet
+                                )}
+
+                                {loggingOut && (
+                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
+                                        <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
+                                            <p className="text-lg font-semibold text-white">Logging you out...</p>
+                                        </div>
+                                    </div>
+                                )}
+
 
                                 {dropdownOpen && (
                                     <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
@@ -147,8 +179,8 @@ export default function Navbar() {
                                 )}
                             </div>
                         </>
-
                     ) : (
+                        
                         <>
                             <button
                                 onClick={() => setShowLogin(true)}
