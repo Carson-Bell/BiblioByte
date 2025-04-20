@@ -266,8 +266,8 @@ const cardStyle = {
 
 const card2Style = {
     width: '500px',
-    height: '420px',
-    alignItems: 'center'
+    alignItems: 'center',
+    transition: 'height 0.3s ease'
 };
 
 const inputFileStyle = {
