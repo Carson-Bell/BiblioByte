@@ -137,7 +137,7 @@ export default function BookPageClient({book, reviews, finds}) {
                     {findsState && findsState.length > 0 ? (
                         <ul className="space-y-4 mt-4">
                             {findsState.map((find) => (
-                                <li key={find._id}>
+                                <li key={find._id || Math.random()}>
                                     <Card className="bg-white p-4 shadow-md w-full">
                                         <div>
                                             <h2 className="text-lg font-bold text-gray-800">{find.heading || ''}</h2>
