@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 function Review({ score, title, content, user, school }) {
     return (
@@ -28,14 +28,32 @@ function Listing({ title, description, views }) {
 
 
 function Page() {
-    const [reviews, setReviews] = useState([
-        { id: 1, score: 4.5, title: "Very Helpful", content: "Alice - University A", user: "Alice", school: "University A" },
-        { id: 2, score: 3.5, title: "Good but not great", content: "Could be better.", user: "Bob", school: "University B" }
-    ]);
-    const [listings, setListings] = useState([
-        { id: 1, title: "Semester Notes", description: "Complete notes for the semester", views: 17 },
-        { id: 2, title: "CSCI Textbook", description: "Introduction to Computer Science", views: 0 }
-    ]);
+    const [reviews, setReviews] = useState([]);
+    const [listings, setListings] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userRes = await fetch('/api/users/me');
+                if (!userRes.ok) throw new Error('Failed to fetch user info');
+                const userData = await userRes.json();
+
+                const userId = userData._id;
+
+                const res = await fetch(`/api/users/${userId}/listings`);
+                if (!res.ok) throw new Error('Failed to fetch user reviews/listings');
+                const data = await res.json();
+
+                setReviews(data.reviews);
+                setListings(data.listings);
+            } catch (error) {
+                console.error('Error fetching user reviews and listings:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     return (
         <div style={pageStyle}>

@@ -13,21 +13,21 @@ export default function Navbar() {
     const [user, setUser] = useState(null);
     const [loggingOut, setLoggingOut] = useState(false);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await fetch('/api/users/me', {
-                    credentials: 'include',
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    setUser(data);
-                }
-            } catch (err) {
-                console.error('Failed to load user:', err);
+    const fetchUser = async () => { // moved this outside use effect so it can be used elsewhere
+        try {
+            const res = await fetch('/api/users/me', {
+                credentials: 'include',
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setUser({ ...data, profilePicVersion: Date.now() });
             }
-        };
+        } catch (err) {
+            console.error('Failed to load user:', err);
+        }
+    };
 
+    useEffect(() => {
         fetchUser();
     }, []);
 
@@ -67,6 +67,22 @@ export default function Navbar() {
         }
         checkAuthStatus();
     }, []);
+
+    useEffect(() => {
+        const handleStorageChange = (event) => {
+            if (event.key === 'profilePicUpdated') {
+                console.log('Detected profile picture update, refetching user...');
+                fetchUser();
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
 
     const handleSignOut = async () => {
         try {

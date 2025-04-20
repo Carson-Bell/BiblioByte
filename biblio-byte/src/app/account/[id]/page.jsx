@@ -102,6 +102,8 @@ export default function Page() {
 
             if (res.ok) {
                 setProfilePic(data.imageUrl);
+                localStorage.setItem('profilePicUpdated', Date.now());
+
             } else {
                 console.error('Upload failed:', data.message);
             }

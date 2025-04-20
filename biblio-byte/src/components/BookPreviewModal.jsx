@@ -52,11 +52,6 @@ export default function BookPreviewModal({ isOpen, onClose, onConfirm, book, sea
                     <button
                         onClick={async () => {
                             await onConfirm?.();
-                            setTimeout(() => {
-                                console.log("Redirecting with searchTerm:", searchTerm);
-                                console.log("✅ Confirm clicked — redirecting with:", searchTerm);
-                                window.location.href = `/search?term=${encodeURIComponent(searchTerm)}&type=Textbook`;
-                            }, 500); // short delay for collection update
                         }}
                         className="bg-teal-800 hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded"
                     >

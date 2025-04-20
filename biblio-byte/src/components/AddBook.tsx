@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import BookPreviewModal from "@/components/BookPreviewModal";
+import { useRouter } from "next/navigation";
 
 
 type Book = {
@@ -21,6 +22,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [previewBook, setPreviewBook] = useState<Book | null>(null);
@@ -65,10 +67,18 @@ export default function AddBook({ onAddBook }: AddBookProps) {
 
       if (!res.ok) throw new Error('Failed to add book');
 
-      console.log('Book added to collection');
+      const data = await res.json();
+
+      if (data.book && data.book._id) {
+        console.log('Book added:', data.book._id);
+        setModalOpen(false);
+        router.push(`/search/${data.book._id}`);
+      } else {
+        console.error('Book added but no ID returned');
+        setModalOpen(false);
+      }
     } catch (err) {
       console.error('Error adding book:', err);
-    } finally {
       setModalOpen(false);
     }
   }
