@@ -107,6 +107,26 @@ export default function Navbar() {
         setDropdownOpen(!dropdownOpen);
     };
 
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownOpen]);
+
     return (
         <>
             <header className="fixed top-0 left-0 w-full bg-zinc-600 shadow-md z-40 p-4 sm:p-4 flex items-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
@@ -163,38 +183,12 @@ export default function Navbar() {
                                 )}
 
                                 {dropdownOpen && (
-                                    <div
-                                        className="fixed inset-x-3 z-40"
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        <div
-                                            className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <Link
-                                                href={`/account/${user?._id}`}
-                                                className="block px-4 py-2 text-black hover:bg-gray-200"
-                                            >
-                                                Profile
-                                            </Link>
-                                            <Link
-                                                href={`/account/${user?._id}/list`}
-                                                className="block px-4 py-2 text-black hover:bg-gray-200"
-                                            >
-                                                My List
-                                            </Link>
-                                            <Link
-                                                href={`/account/${user?._id}/listings`}
-                                                className="block px-4 py-2 text-black hover:bg-gray-200"
-                                            >
-                                                My Reviews/Documents
-                                            </Link>
-                                            <button
-                                                onClick={handleSignOut}
-                                                className="w-full text-left px-4 py-2 text-black hover:bg-gray-200"
-                                            >
-                                                Sign Out
-                                            </button>
+                                    <div onClick={toggleDropdown} className="relative z-50" ref={dropdownRef}>
+                                        <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
+                                            <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                            <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
+                                            <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
+                                            <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
                                         </div>
                                     </div>
                                 )}
