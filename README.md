@@ -7,4 +7,7 @@ Group Members:
 - Carson Bell
 
 ## Project Goals and Design
-... 
+### Goal 
+
+### Design Ideas
+### Description
