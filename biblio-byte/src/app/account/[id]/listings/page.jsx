@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+//import Image from "../../../../assets/pen-to-square.svg";
 
-function Review({ score, title, content, user, school }) {
+function Review({ review, onDelete, onEdit }) {
+    const { id, score, title, content, user, school } = review;
+
     return (
         <div style={reviewCardStyle}>
             <div style={scoreStyle}>{score}</div>
@@ -11,18 +14,43 @@ function Review({ score, title, content, user, school }) {
                 <p>{content}</p>
                 <span style={userInfoStyle}>{user} - {school}</span>
             </div>
+            <div className="buttonContainer" style={buttonContainerStyle}>
+                <button onClick={() => onEdit(review)} style={editButtonStyle}>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
+                        alt="Edit"
+                        style={penIconStyle}
+                    />
+                </button>
+                <button onClick={() => onDelete(id)} style={deleteButtonStyle}>X</button>
+            </div>
         </div>
     );
 }
 
 
-function Listing({ title, description, views }) {
+function ListingCard({ listing, onDelete, onEdit }) {
+    const { id, title, description, views } = listing;
+
     return (
         <div style={listingCardStyle}>
-            <h3 style={titleStyle}>{title}</h3>
-            <p>{description}</p>
-            <span style={viewsStyle}>{views} Views</span>
+            <div style={reviewContentStyle}>
+                <h3 style={titleStyle}>{title}</h3>
+                <p>{description}</p>
+                <span style={viewsStyle}>{views} Views</span>
+            </div>
+            <div className="buttonContainer" style={buttonContainerStyle}>
+                <button onClick={() => onEdit(review)} style={editButtonStyle}>
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
+                        alt="Edit"
+                        style={penIconStyle}
+                    />
+                </button>
+                <button onClick={() => onDelete(id)} style={deleteButtonStyle}>X</button>
+            </div>
         </div>
+
     );
 }
 
@@ -54,6 +82,39 @@ function Page() {
         fetchData();
     }, []);
 
+    const handleDeleteReview = async (id) => {
+        try {
+            const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Failed to delete review');
+            setReviews(prev => prev.filter(r => r.id !== id));
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete review');
+        }
+    };
+
+    const handleDeleteListing = async (id) => {
+        try {
+            const res = await fetch(`/api/listings/${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Failed to delete listing');
+            setListings(prev => prev.filter(l => l.id !== id));
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete listing');
+        }
+    };
+
+    const handleEditReview = (review) => {
+        // Add your modal logic or inline editing form here
+        alert(`Open review edit modal for: ${review.title}`);
+    };
+
+    const handleEditListing = (listing) => {
+        // Add your modal logic or inline editing form here
+        alert(`Open listing edit modal for: ${listing.title}`);
+    };
+
+
 
     return (
         <div style={pageStyle}>
@@ -62,26 +123,23 @@ function Page() {
                 {reviews.map(review =>
                     <Review
                         key={review.id}
-                        score={review.score}
-                        title={review.title}
-                        content={review.content}
-                        user={review.user}
-                        school={review.school}
+                        review={review}
+                        onDelete={handleDeleteReview}
+                        onEdit={handleEditReview}
                     />
                 )}
+
             </div>
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Documents</h1>
-                <div style={listingContainerStyle}>
                     {listings.map(listing =>
-                        <Listing
+                        <ListingCard
                             key={listing.id}
-                            title={listing.title}
-                            description={listing.description}
-                            views={listing.views}
+                            listing={listing}
+                            onDelete={handleDeleteListing}
+                            onEdit={handleEditListing}
                         />
                     )}
-                </div>
             </div>
         </div>
     );
@@ -108,7 +166,8 @@ const reviewCardStyle = {
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     padding: '15px',
     borderRadius: '5px',
-    marginBottom: '10px'
+    marginBottom: '10px',
+    width: '100%'
 };
 
 const scoreStyle = {
@@ -128,11 +187,14 @@ const userInfoStyle = {
 };
 
 const listingCardStyle = {
-    backgroundColor: '#fff',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: 'white',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     padding: '15px',
     borderRadius: '5px',
-    marginBottom: '10px'
+    marginBottom: '10px',
+    width: '100%'
 };
 
 const titleStyle = {
@@ -145,10 +207,38 @@ const viewsStyle = {
     color: '#666'
 };
 
-const listingContainerStyle = {
+const buttonContainerStyle = {
     display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap'
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '5px',
 };
+
+const editButtonStyle = {
+    backgroundColor: 'black',
+    color: 'white',
+    border: 'none',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '1.1rem',
+};
+
+const deleteButtonStyle = {
+    backgroundColor: '#990F02',
+    color: 'white',
+    border: 'none',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '1.1rem',
+};
+
+const penIconStyle = {
+    width: '20px',
+    height: '20px',
+    color: 'white',
+};
+
 
 export default Page;
