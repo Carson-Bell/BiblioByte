@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-//import Image from "../../../../assets/pen-to-square.svg";
 
 function Review({ review, onDelete, onEdit }) {
     const { id, score, title, content, user, school } = review;
@@ -11,10 +10,10 @@ function Review({ review, onDelete, onEdit }) {
             <div style={scoreStyle}>{score}</div>
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
-                <p>{content}</p>
+                <p style={descriptionStyle}>{content}</p>
                 <span style={userInfoStyle}>{user} - {school}</span>
             </div>
-            <div className="buttonContainer" style={buttonContainerStyle}>
+            <div style={buttonContainerStyle}>
                 <button onClick={() => onEdit(review)} style={editButtonStyle}>
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
@@ -36,11 +35,11 @@ function ListingCard({ listing, onDelete, onEdit }) {
         <div style={listingCardStyle}>
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
-                <p>{description}</p>
+                <p style={descriptionStyle}>{description}</p>
                 <span style={viewsStyle}>{views} Views</span>
             </div>
-            <div className="buttonContainer" style={buttonContainerStyle}>
-                <button onClick={() => onEdit(review)} style={editButtonStyle}>
+            <div style={buttonContainerStyle}>
+                <button onClick={() => onEdit(listing)} style={editButtonStyle}>
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
                         alt="Edit"
@@ -50,7 +49,6 @@ function ListingCard({ listing, onDelete, onEdit }) {
                 <button onClick={() => onDelete(id)} style={deleteButtonStyle}>X</button>
             </div>
         </div>
-
     );
 }
 
@@ -167,18 +165,23 @@ const reviewCardStyle = {
     padding: '15px',
     borderRadius: '5px',
     marginBottom: '10px',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'space-between',
 };
 
 const scoreStyle = {
     fontSize: '24px',
     fontWeight: 'bold',
     color: '#333',
-    marginRight: '20px'
+    marginRight: '20px',
+    flex: '0 0 auto',
 };
 
 const reviewContentStyle = {
-    flex: '1'
+    flex: '1',
+    wordWrap: 'break-word',
+    whiteSpace: 'normal',
+    overflow: 'hidden',
 };
 
 const userInfoStyle = {
@@ -194,24 +197,33 @@ const listingCardStyle = {
     padding: '15px',
     borderRadius: '5px',
     marginBottom: '10px',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'space-between',
 };
 
 const titleStyle = {
     fontWeight: 'bold',
-    marginBottom: '5px'
+    marginBottom: '5px',
+    fontSize: '1rem',
+    color: 'black',
+    whiteSpace: 'normal',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
 };
 
 const viewsStyle = {
     fontSize: '14px',
-    color: '#666'
+    color: '#666',
+    marginTop: '5px',
 };
 
 const buttonContainerStyle = {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-end',
+    gap: '10px',
     alignItems: 'center',
-    gap: '5px',
+    marginTop: '10px',
 };
 
 const editButtonStyle = {
@@ -238,6 +250,14 @@ const penIconStyle = {
     width: '20px',
     height: '20px',
     color: 'white',
+};
+
+const descriptionStyle = {
+    fontSize: '14px',
+    color: '#666',
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+    overflow: 'hidden',
 };
 
 
