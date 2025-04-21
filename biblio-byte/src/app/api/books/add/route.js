@@ -8,6 +8,15 @@ export async function POST(req) {
 
         await connectMongoDB();
 
+        // Check if a book with the same title and author already exists
+        const existingBook = await Book.findOne({ title, author });
+        if (existingBook) {
+            return NextResponse.json(
+                { message: 'A book with the same title and author already exists.' },
+                { status: 400 }
+            );
+        }
+
         const googleRes = await fetch(
             `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}`
         );

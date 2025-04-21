@@ -65,6 +65,13 @@ export default function AddBook({ onAddBook }: AddBookProps) {
         body: JSON.stringify(previewBook),
       });
 
+      if (res.status === 400) {
+        const errorData = await res.json();
+        alert(errorData.message); // Display duplicate error message
+        setModalOpen(false);
+        return;
+      }
+
       if (!res.ok) throw new Error('Failed to add book');
 
       const data = await res.json();
@@ -79,9 +86,10 @@ export default function AddBook({ onAddBook }: AddBookProps) {
       }
     } catch (err) {
       console.error('Error adding book:', err);
+      alert('Failed to add book. Please try again.');
       setModalOpen(false);
     }
-  }
+  };
 
   return (
       <>

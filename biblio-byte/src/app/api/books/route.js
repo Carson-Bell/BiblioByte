@@ -47,6 +47,14 @@ export async function POST(req) { //Used for the search bar on the home page
             query.school = { $regex: searchTerm, $options: 'i' };
         }
 
+        const existingBook = await Book.findOne({ title, author });
+            if (existingBook) {
+                return NextResponse.json(
+                { message: 'A book with the same title and author already exists.' },
+                { status: 400 }
+            );
+}
+
         // Perform the search
         const results = await Book.find(query);
 
