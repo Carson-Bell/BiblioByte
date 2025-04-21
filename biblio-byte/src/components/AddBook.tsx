@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 type Book = {
   title: string;
   author: string;
-  description: string;
-  link: string;
   thumbnail?: string;
 };
 
@@ -19,8 +17,6 @@ type AddBookProps = {
 export default function AddBook({ onAddBook }: AddBookProps) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [description, setDescription] = useState('');
-  const [link, setLink] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
@@ -40,8 +36,6 @@ export default function AddBook({ onAddBook }: AddBookProps) {
       const matchedBook: Book = {
         title: volume.title || title,
         author: (volume.authors?.[0]) || author,
-        description: volume.description || description,
-        link: volume.infoLink || link,
         thumbnail: volume.imageLinks?.thumbnail || '',
       };
 
@@ -49,7 +43,7 @@ export default function AddBook({ onAddBook }: AddBookProps) {
       setModalOpen(true);
     } else {
       // for no match found
-      onAddBook({ title, author, description, link });
+      onAddBook({ title, author });
     }
   };
 
@@ -102,19 +96,6 @@ export default function AddBook({ onAddBook }: AddBookProps) {
               required
               className="p-2 border rounded"
               
-          />
-          <textarea
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="p-2 border rounded"
-          />
-          <input
-              type="url"
-              placeholder="Link (optional)"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              className="p-2 border rounded"
           />
           <button
               type="submit"
