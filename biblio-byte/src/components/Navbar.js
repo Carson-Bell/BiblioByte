@@ -103,10 +103,6 @@ export default function Navbar() {
         }
     };
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -156,10 +152,15 @@ export default function Navbar() {
                     {authenticated ? (
                         // profile dropdown
                         <>
-                            <span className="text-white text-xl ml-2">
-                                    Welcome, {user?.name}!
-                                </span>
-                            <div onClick={toggleDropdown} className="relative z-50">
+            <span className="text-white text-xl ml-2">
+                Welcome, {user?.fullName}!
+            </span>
+                            <div
+                                onMouseEnter={() => setDropdownOpen(true)}  // Open on hover
+                                onMouseLeave={() => setDropdownOpen(false)} // Close when hover ends
+                                className="relative z-50"
+                            >
+                                {/* Profile Image */}
                                 {user?.profilePic ? (
                                     <img
                                         src={user.profilePic}
@@ -177,7 +178,7 @@ export default function Navbar() {
                                     <p>Profile</p> // fallback if user hasn’t loaded yet
                                 )}
 
-
+                                {/* Dropdown Menu */}
                                 {loggingOut && (
                                     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
                                         <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
@@ -187,16 +188,13 @@ export default function Navbar() {
                                 )}
 
                                 {dropdownOpen && (
-                                    <div onClick={toggleDropdown} className="relative z-50" ref={dropdownRef}>
-                                        <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
-                                            <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
-                                            <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
-                                            <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
-                                            <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
-                                        </div>
+                                    <div className="absolute right-0 mt-0 w-48 bg-white shadow-lg rounded-lg py-2">
+                                        <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                        <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
+                                        <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
+                                        <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
                                     </div>
                                 )}
-
                             </div>
                         </>
                     ) : (
@@ -217,6 +215,7 @@ export default function Navbar() {
                         </>
                     )}
                 </div>
+
             </header>
 
             <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
