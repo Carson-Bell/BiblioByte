@@ -156,6 +156,9 @@ export default function Navbar() {
                     {authenticated ? (
                         // profile dropdown
                         <>
+                            <span className="text-white text-xl ml-2">
+                                    Welcome, {user?.name}!
+                                </span>
                             <div onClick={toggleDropdown} className="relative z-50">
                                 {user?.profilePic ? (
                                     <img
@@ -173,6 +176,7 @@ export default function Navbar() {
                                 ) : (
                                     <p>Profile</p> // fallback if user hasn’t loaded yet
                                 )}
+
 
                                 {loggingOut && (
                                     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
