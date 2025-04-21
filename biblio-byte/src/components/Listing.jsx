@@ -65,7 +65,7 @@ function Listing({ show, onClose, bookId, onFindAdded }) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to submit listing');
+            throw new Error('Failed to submit listing, you may not be logged in.');
         }
 
             const createdFind = await response.json();
