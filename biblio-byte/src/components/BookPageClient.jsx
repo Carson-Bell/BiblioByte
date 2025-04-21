@@ -135,43 +135,40 @@ export default function BookPageClient({book, reviews, finds}) {
                     </button>
 
                     {findsState && findsState.length > 0 ? (
-                        <ul className="space-y-4 mt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 mt-4">
                             {findsState.map((find) => (
-                                <li key={find._id || Math.random()}>
-                                    <Card className="bg-white p-4 shadow-md w-full">
-                                        <div>
-                                            <h2 className="text-lg font-bold text-gray-800">{find.heading || ''}</h2>
-                                            <p className="text-sm font-bold text-gray-700">{find.name || 'User'}</p>
-                                            <div>
-                                                <p className="text-sm text-gray-600">{find.description || 'No description available'}</p>
-                                            </div>
+                                <div key={find._id || Math.random()} className="bg-white p-4 shadow-md rounded-lg">
+                                    <h2 className="text-lg font-bold text-gray-800">
+                                        {find.url ? 'Link' : find.file ? 'File' : 'Find'}
+                                    </h2>
+                                    <p className="text-sm font-bold text-gray-700">{find.name || 'User'}</p>
+                                    <div>
+                                        <p className="text-sm text-gray-600">{find.description || 'No description available'}</p>
+                                    </div>
 
-                                            {find.url && (
-                                                <a
-                                                    href={find.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-600 underline"
-                                                >
-                                                    Visit Link
-                                                </a>
-                                            )}
+                                    {find.url && (
+                                        <a
+                                            href={find.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 underline"
+                                        >
+                                            Visit Link
+                                        </a>
+                                    )}
 
-                                            {!find.url && find.file && (
-                                                <a
-                                                    href={`/uploads/${find.file}`}
-                                                    download
-                                                    className="text-blue-600 underline"
-                                                >
-                                                    Download File
-                                                </a>
-                                            )}
-
-                                        </div>
-                                    </Card>
-                                </li>
+                                    {!find.url && find.file && (
+                                        <a
+                                            href={`/uploads/${find.file}`}
+                                            download
+                                            className="text-blue-600 underline"
+                                        >
+                                            Download File
+                                        </a>
+                                    )}
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     ) : (
                         <div
                             className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
