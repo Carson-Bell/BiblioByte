@@ -34,12 +34,12 @@ export default function BookPageClient({book, reviews, finds}) {
             const data = await res.json();
 
             if (res.ok) {
-                alert('Book added to your watchlist!');
+                alert('Book added to your list!');
             } else {
                 alert(`Error: ${data.message || data.error}`);
             }
         } catch (err) {
-            console.error('Watchlist error:', err);
+            console.error('List error:', err);
             alert('Something went wrong.');
         }
     };
