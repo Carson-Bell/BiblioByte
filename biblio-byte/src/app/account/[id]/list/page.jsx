@@ -153,10 +153,11 @@ const titleStyle = {
     fontSize: '1rem',
     fontWeight: '600',
     margin: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: 'normal',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     color: 'black',
+    wordWrap: 'break-word',
 };
 
 const authorStyle = {
