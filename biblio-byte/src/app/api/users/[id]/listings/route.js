@@ -48,6 +48,7 @@ export async function GET(req, { params }) {
                             id: find._id,
                             title: find.file || find.url,
                             description: find.description,
+                            bookId: book._id,
                         });
                     }
                 });

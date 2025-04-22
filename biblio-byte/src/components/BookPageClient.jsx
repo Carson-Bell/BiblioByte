@@ -6,7 +6,7 @@ import BookPageHeader from "./BookPageHeader.js";
 import Review from "./Review.jsx";
 import Listing from "./Listing.jsx";
 
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
 export default function BookPageClient({book, reviews, finds}) {
     const [showReview, setShowReview] = useState(false);
@@ -19,30 +19,51 @@ export default function BookPageClient({book, reviews, finds}) {
             / reviewsState.length
         ).toFixed(1)
         : '—';
+    const [isOnWatchlist, setIsOnWatchlist] = useState(false);
 
-    const handleAddToWatchlist = async (bookId) => {
+    const handleToggleWatchlist = async (bookId) => {
         try {
+            const method = isOnWatchlist ? 'DELETE' : 'POST';
             const res = await fetch('/api/users/watchlist', {
-                method: 'POST',
+                method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include', // make sure cookies/auth token are included
-                body: JSON.stringify({bookId}),
+                credentials: 'include',
+                body: JSON.stringify({ bookId }),
             });
 
             const data = await res.json();
 
             if (res.ok) {
-                alert('Book added to your list!');
+                setIsOnWatchlist(!isOnWatchlist);
+                alert(isOnWatchlist ? 'Book removed from your list!' : 'Book added to your list!');
             } else {
                 alert(`Error: ${data.message || data.error}`);
             }
         } catch (err) {
-            console.error('List error:', err);
+            console.error('Watchlist error:', err);
             alert('Something went wrong.');
         }
     };
+
+    useEffect(() => {
+        const checkWatchlist = async () => {
+            try {
+                const res = await fetch('/api/users/me', { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    const watchlist = data.watchlist || [];
+                    const isBookInWatchlist = watchlist.some((entry) => entry.book?.toString() === book._id.toString());
+                    setIsOnWatchlist(isBookInWatchlist);
+                }
+            } catch (err) {
+                console.error('Failed to check watchlist:', err);
+            }
+        };
+
+        checkWatchlist();
+    }, [book._id]);
 
     return (
         <>
@@ -67,11 +88,11 @@ export default function BookPageClient({book, reviews, finds}) {
                         </h3>
                         <a>
                             <button
-                                onClick={() => handleAddToWatchlist(book._id)}
+                                onClick={() => handleToggleWatchlist(book._id)}
                                 className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                                 style={{backgroundColor: 'rgba(11,79,74, 1)'}}
                             >
-                                Add to List
+                                {isOnWatchlist ? 'Remove from List' : 'Add to List'}
                             </button>
                         </a>
                         <p className="text-m text-gray-600">

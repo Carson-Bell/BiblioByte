@@ -57,3 +57,37 @@ export async function POST(req) {
         return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500});
     }
 }
+
+export async function DELETE(req) {
+    const { valid, decoded, error } = auth(req);
+    if (!valid) {
+        return new Response(JSON.stringify({ message: error }), { status: 401 });
+    }
+
+    const { bookId, findId } = await req.json(); // <-- get both IDs
+
+    if (!bookId || !findId) {
+        return new Response(JSON.stringify({ message: 'Missing bookId or findId' }), { status: 400 });
+    }
+
+    try {
+        await connectMongoDB();
+
+        const book = await Book.findById(bookId);
+        if (!book) {
+            return new Response(JSON.stringify({ message: 'Book not found' }), { status: 404 });
+        }
+
+        // Remove the find
+        book.finds = book.finds.filter(find => find._id.toString() !== findId);
+
+        await book.save();
+
+        console.log("Find deleted successfully:", findId);
+
+        return new Response(JSON.stringify({ message: 'Find deleted successfully' }), { status: 200 });
+    } catch (error) {
+        console.error('Error deleting find:', error);
+        return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
+    }
+}

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import Link from "next/link.js";
+import Link from "next/link";
 import Card from "../../../../components/Card.js";
 
 function BookCard({ title, author, onDelete, book, bookId }) {
@@ -17,8 +17,8 @@ function BookCard({ title, author, onDelete, book, bookId }) {
                     <div style={bookContentStyle}>
                         <Link href={`/search/${book._id}`} passHref>
                             <h2 style={titleStyle}>Title: {book.title}</h2>
+                            <p style={authorStyle}>Author: {book.author}</p>
                         </Link>
-                        <p style={authorStyle}>Author: {book.author}</p>
                     </div>
                 </div>
                 <button

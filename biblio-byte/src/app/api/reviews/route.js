@@ -31,6 +31,15 @@ export async function POST(req) {
             return new Response(JSON.stringify({ message: 'Book not found' }), { status: 404 });
         }
 
+        const alreadyReviewed = book.reviews.some(
+            (review) => review.name.toLowerCase() === user.name.toLowerCase()
+        );
+
+        if (alreadyReviewed) {
+            console.log('User already reviewed this book.');
+            return new Response(JSON.stringify({ message: 'You have already reviewed this book' }), { status: 400 });
+        }
+
         const newReview = {
             _id: new mongoose.Types.ObjectId(), // manually creating id this time
             name: user.name,
@@ -44,7 +53,16 @@ export async function POST(req) {
 
         console.log("Review added successfully:", newReview);
 
-        return new Response(JSON.stringify(newReview), { status: 201 });
+        return new Response(JSON.stringify({
+            id: newReview._id,
+            title: newReview.title,
+            content: newReview.comment,
+            score: newReview.rating,
+            user: newReview.name,
+            school: user.university,
+            bookId: book._id,
+        }), { status: 201 });
+
     } catch (error) {
         console.error('Error adding review:', error);
         return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
