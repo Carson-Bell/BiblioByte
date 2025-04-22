@@ -54,6 +54,8 @@ export default function Review({ show, onClose, bookId, onReviewAdded }) {
                 body: JSON.stringify(payload),
             });
 
+            const responseData = await response.json();
+
             if (response.ok) {
                 const createdReview = await response.json();
                 if (onReviewAdded) {
@@ -65,6 +67,16 @@ export default function Review({ show, onClose, bookId, onReviewAdded }) {
                     });
                 }
                 alert("Review added successfully!");
+
+                setFormData({
+                    title: '',
+                    description: '',
+                    rating: 1
+                });
+
+                onClose();
+            } else {
+                alert(responseData.message || 'Failed to submit review.');
 
                 setFormData({
                     title: '',

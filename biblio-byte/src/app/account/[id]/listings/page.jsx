@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import listing from '../../../../components/Listing';
 //import Image from "../../../../assets/pen-to-square.svg";
 
 function Review({ review, onDelete, onEdit }) {
@@ -30,24 +32,23 @@ function Review({ review, onDelete, onEdit }) {
 
 
 function ListingCard({ listing, onDelete, onEdit }) {
-    const { id, title, description, views } = listing;
+    const { id, title, description } = listing;
 
     return (
         <div style={listingCardStyle}>
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
                 <p>{description}</p>
-                <span style={viewsStyle}>{views} Views</span>
             </div>
             <div className="buttonContainer" style={buttonContainerStyle}>
-                <button onClick={() => onEdit(review)} style={editButtonStyle}>
+                <button onClick={() => onEdit(listing)} style={editButtonStyle}>
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
                         alt="Edit"
                         style={penIconStyle}
                     />
                 </button>
-                <button onClick={() => onDelete(id)} style={deleteButtonStyle}>X</button>
+                <button onClick={() => onDelete(listing)} style={deleteButtonStyle}>X</button>
             </div>
         </div>
 
@@ -72,6 +73,8 @@ function Page() {
                 if (!res.ok) throw new Error('Failed to fetch user reviews/listings');
                 const data = await res.json();
 
+                console.log("Listings data:", data.listings);
+
                 setReviews(data.reviews);
                 setListings(data.listings);
             } catch (error) {
@@ -83,21 +86,26 @@ function Page() {
     }, []);
 
     const handleDeleteReview = async (id) => {
-        try {
-            const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('Failed to delete review');
-            setReviews(prev => prev.filter(r => r.id !== id));
-        } catch (error) {
-            console.error(error);
-            alert('Failed to delete review');
-        }
+        alert('placeholder');
     };
 
-    const handleDeleteListing = async (id) => {
+    const handleDeleteListing = async (listing) => {
+        if (!listing.bookId || !listing.id) {
+            alert('Invalid listing');
+            return;
+        }
+
         try {
-            const res = await fetch(`/api/listings/${id}`, { method: 'DELETE' });
+            const res = await fetch('/api/finds', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bookId: listing.bookId,
+                    findId: listing.id
+                })
+            });
             if (!res.ok) throw new Error('Failed to delete listing');
-            setListings(prev => prev.filter(l => l.id !== id));
+            setListings(prev => prev.filter(l => l.id !== listing.id));
         } catch (error) {
             console.error(error);
             alert('Failed to delete listing');

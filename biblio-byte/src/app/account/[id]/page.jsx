@@ -1,8 +1,8 @@
 // Profile Page
 'use client';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import {useState, useEffect} from 'react';
+import {useRouter} from 'next/navigation';
 
 export default function Page() {
     const [fullName, setFullName] = useState('');
@@ -21,6 +21,9 @@ export default function Page() {
     const [emailError, setEmailError] = useState(false);
     const [confirmEmailError, setConfirmEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+
+    // update loading thing
+    const [uploading, setUploading] = useState(false);
 
     const handleUpdate = async (event) => {
         event.preventDefault();
@@ -87,6 +90,8 @@ export default function Page() {
 
     const handleImageChange = async (event) => {
         if (event.target.files && event.target.files[0]) {
+            setUploading(true);
+
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
 
@@ -103,10 +108,13 @@ export default function Page() {
             if (res.ok) {
                 setProfilePic(data.imageUrl);
                 localStorage.setItem('profilePicUpdated', Date.now());
-                window.location.reload();
+                setTimeout(() => {
+                    window.location.reload(); // short delay to emulate loading
+                }, 500);
 
             } else {
                 console.error('Upload failed:', data.message);
+                setUploading(false);
             }
         }
     };
@@ -131,7 +139,7 @@ export default function Page() {
 
     useEffect(() => {
         async function fetchProfile() {
-            const res = await fetch('/api/users/me', { credentials: 'include' });
+            const res = await fetch('/api/users/me', {credentials: 'include'});
             const data = await res.json();
             if (res.ok) {
                 setFullName(data.fullName || '');
@@ -146,24 +154,25 @@ export default function Page() {
                 setDisplaySchool(data.school || '');
             }
         }
+
         fetchProfile();
     }, []);
 
 
     return (
         <>
-        <Head>
-            <title>Account</title>
-        </Head>
-    <div style={pageStyle}>
-        <div style={cardStyle} className="card1 welcome">
-            <h1 style={{fontSize: '24px'}}>Welcome back!</h1>
-            {/* this was previously <div> and i made it <img>*/}
-            <img
-                src={profilePic}
-                alt="Profile"
-                style={{
-                    height: '200px',
+            <Head>
+                <title>Account</title>
+            </Head>
+            <div style={pageStyle}>
+                <div style={cardStyle} className="card1 welcome">
+                    <h1 style={{fontSize: '24px'}}>Welcome back!</h1>
+                    {/* this was previously <div> and i made it <img>*/}
+                    <img
+                        src={profilePic}
+                        alt="Profile"
+                        style={{
+                            height: '200px',
                             width: '200px',
                             objectFit: 'cover',
                             borderRadius: '50%',
@@ -171,16 +180,47 @@ export default function Page() {
                             border: '2px solid black'
                         }}
                     />
-                    <input type="file" onChange={handleImageChange} style={{ display: 'none' }} />
-                    <button style={buttonStyle} onClick={() => document.querySelector('input[type="file"]').click()} >
+
+                    {/* BRI CAN YOU STYLE THIS*/}
+                    {uploading && (
+                        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/40 z-50">
+                            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center">
+                                <svg
+                                    className="animate-spin h-8 w-8 text-teal-700 mb-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                    ></path>
+                                </svg>
+                                <p className="text-lg font-semibold text-gray-700">Uploading...</p>
+                            </div>
+                        </div>
+                    )}
+
+
+                    <input type="file" onChange={handleImageChange} style={{display: 'none'}}/>
+                    <button style={buttonStyle} onClick={() => document.querySelector('input[type="file"]').click()}>
                         Upload Image
                     </button>
-                    <p style={{ fontSize: '20px', padding:'10px'}}><strong>{displayFullName}</strong></p>
+                    <p style={{fontSize: '20px', padding: '10px'}}><strong>{displayFullName}</strong></p>
                     <p>{displaySchool}</p>
                     {/*<button style={buttonStyle} onClick={handleSignOut}>Logout</button>*/}
                 </div>
                 <div style={{...cardStyle, ...card2Style}} className="card2 edit-profile">
-                    <h1 style={{ fontSize: '24px' }}>Edit Profile</h1>
+                    <h1 style={{fontSize: '24px'}}>Edit Profile</h1>
                     <input
                         type="text"
                         placeholder="Full Name"

@@ -157,7 +157,7 @@ export default function Navbar() {
                         // profile dropdown
                         <>
                             <span className="text-white text-xl ml-2">
-                                    Welcome, {user?.name}!
+                                    Welcome, {user?.fullName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}!
                                 </span>
                             <div onClick={toggleDropdown} className="relative z-50">
                                 {user?.profilePic ? (

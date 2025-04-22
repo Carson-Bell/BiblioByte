@@ -37,7 +37,7 @@ export async function POST(req) {
         user.watchlist.push({ book: bookId });
         await user.save();
 
-        return new Response(JSON.stringify({ message: 'Book added to watchlist' }), { status: 200 });
+        return new Response(JSON.stringify({ message: 'Book added to watchlist' }), { status: 201 });
 
     } catch (err) {
         console.error('Error updating watchlist:', err);
