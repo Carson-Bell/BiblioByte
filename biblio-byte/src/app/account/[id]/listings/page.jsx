@@ -128,27 +128,42 @@ function Page() {
         <div style={pageStyle}>
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Reviews</h1>
-                {reviews.map(review =>
+                {reviews.length === 0 ? (
+                    <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                        <p className="text-2xl text-gray-200 mb-2">No Reviews</p>
+                        <p className="text-md text-gray-400 italic font-light">Post some reviews and come back later!</p>
+                    </div>
+                ) : (
+                reviews.map(review => (
                     <Review
                         key={review.id}
                         review={review}
                         onDelete={handleDeleteReview}
                         onEdit={handleEditReview}
                     />
-                )}
+                ))
+                    )}
 
             </div>
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Documents</h1>
-                    {listings.map(listing =>
+                {listings.length === 0 ? (
+                    <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                        <p className="text-2xl text-gray-200 mb-2">No Documents</p>
+                        <p className="text-md text-gray-400 italic font-light">Upload some files and links and come back later!</p>
+                    </div>
+                ) : (
+                    listings.map(listing => (
                         <ListingCard
                             key={listing.id}
                             listing={listing}
                             onDelete={handleDeleteListing}
                             onEdit={handleEditListing}
                         />
-                    )}
+                    ))
+                )}
             </div>
+
         </div>
     );
 }
