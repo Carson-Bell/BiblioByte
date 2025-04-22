@@ -3,7 +3,35 @@ import AddBook from '@/components/AddBook';
 import React from 'react';
 
 const CreateBook = () => {
-    const handleAddBook = (newBook: { title: string; author: string; description: string; link: string }) => {
+    const handleAddBook = async (newBook: { title: string; author: string; description: string; link: string }) => {
+
+        try {
+            const response = await fetch('/api/books/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newBook),
+            });
+    
+            if (response.status === 400) {
+                const errorData = await response.json();
+                alert(errorData.message); // Display duplicate error message
+                return;
+            }
+    
+            if (!response.ok) {
+                throw new Error('Failed to add book');
+            }
+    
+            const createdBook = await response.json();
+            console.log('New Book Added:', createdBook);
+            alert('Book added successfully!');
+        } catch (error) {
+            console.error('Error adding book:', error);
+            alert('Failed to add book. Please try again.');
+        }
+
         console.log('New Book Added:', newBook);
         // Add logic to save the book (e.g., API call or state update)
     };

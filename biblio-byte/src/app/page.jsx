@@ -77,7 +77,7 @@ export default function Home() {
 
                     <div style={cardStyle}>
                         <h1 className="text-3xl font-semibold hover:font-bold text-white" style = {headerStyle}>BiblioByte</h1>
-                        <p className="text-white" style={descriptionStyle}>Search for textbooks, classes, or schools!</p>
+                        <p className="text-white" style={descriptionStyle}>Search for Textbooks!</p>
                         <form onSubmit={handleSearch} style={mobileFormStyle}>
                             <input className='text-white'
                                 type="text"
@@ -86,15 +86,6 @@ export default function Home() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 style={mobileInputStyle}
                             />
-                            <select className='text-white'
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                style={selectStyle}
-                            >
-                                <option value="Textbook">Textbook</option>
-                                <option value="Class">Class</option>
-                                <option value="School">School</option>
-                            </select>
                             <button type="submit" style={buttonStyle}>Search</button>
                         </form>
                     </div>
@@ -120,18 +111,9 @@ export default function Home() {
                             BiblioByte
                         </div>
                         <div className="text-white" style={descriptionStyle}>
-                            <p>Search for a textbook, class, or school!</p>
+                            <p>Search for a Textbook!</p>
                         </div>
                         <form onSubmit={handleSearch} style={formStyle}>
-                            <select className='text-white'
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                style={selectStyle}
-                            >
-                                <option value="Textbook" className='text-black'>Textbook</option>
-                                <option value="Class" className='text-black'>Class</option>
-                                <option value="School" className='text-black'>School</option>
-                            </select>
                             <input className='text-white'
                                 type="text"
                                 placeholder="Search..."

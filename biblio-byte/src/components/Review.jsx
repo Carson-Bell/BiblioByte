@@ -54,6 +54,11 @@ export default function Review({ show, onClose, bookId, onReviewAdded }) {
                 body: JSON.stringify(payload),
             });
 
+            if (response.status === 401) {
+                alert("You must be logged in to leave a review.");
+                return;
+            }
+
             if (response.ok) {
                 const createdReview = await response.json();
                 if (onReviewAdded) {
