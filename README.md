@@ -1,4 +1,5 @@
 # BiblioByte
+/Capture.JPG
 ### Web Programming Spring 2025 Group Project <br/> 
 Group Members: 
 - Rachel Mende
