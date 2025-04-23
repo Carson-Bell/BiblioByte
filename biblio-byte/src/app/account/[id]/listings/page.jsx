@@ -169,37 +169,79 @@ function Page() {
     return (
         <div style={pageStyle}>
             {editingReview && (   // PART OF EDIT REVIEW DISPLAY
-                <div style={modalOverlayStyle}>
-                    <div style={modalContentStyle}>
-                        <h2>Edit Review</h2>
-                        <input
-                            type="text"
-                            value={editingReview.title}
-                            onChange={(e) =>
-                                setEditingReview({ ...editingReview, title: e.target.value })
-                            }
-                        />
-                        <textarea
-                            value={editingReview.content}
-                            onChange={(e) =>
-                                setEditingReview({ ...editingReview, content: e.target.value })
-                            }
-                        />
-                        <input
-                            type="number"
-                            value={editingReview.score}
-                            min="0.5"
-                            max="5"
-                            step="0.5"
-                            onChange={(e) =>
-                                setEditingReview({ ...editingReview, score: parseFloat(e.target.value) })
-                            }
-                        />
-                        <button onClick={saveEditedReview}>Save</button>
-                        <button onClick={() => setEditingReview(null)}>Cancel</button>
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20"
+                    onClick={() => setEditingReview(null)}
+                >
+                    <div
+                        className="bg-white p-6 rounded-md shadow-lg min-w-[300px] relative"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h2 className="text-lg font-semibold mb-4 text-black">Edit Review</h2>
+                        <form
+                            className="flex flex-col gap-3"
+                            onSubmit={saveEditedReview}
+                        >
+                            <div>
+                                <label className="block font-semibold mb-2">Title</label>
+                                <textarea
+                                    className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
+                                    name="title"
+                                    placeholder="Review Title"
+                                    value={editingReview.title}
+                                    onChange={(e) =>
+                                        setEditingReview({ ...editingReview, title: e.target.value })
+                                    }
+                                    rows={1}
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label className="block font-semibold mb-2">Description</label>
+                                <textarea
+                                    className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:border-blue-500"
+                                    name="content"
+                                    placeholder="What's your review?"
+                                    value={editingReview.content}
+                                    onChange={(e) =>
+                                        setEditingReview({ ...editingReview, content: e.target.value })
+                                    }
+                                    rows={6}
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label className="block font-semibold mb-2">Rating</label>
+                                <select
+                                    name="score"
+                                    className="w-full border px-2 py-2 rounded text-black"
+                                    value={editingReview.score}
+                                    onChange={(e) =>
+                                        setEditingReview({ ...editingReview, score: parseFloat(e.target.value) })
+                                    }
+                                >
+                                    {[...Array(10).keys()].map(x => (
+                                        <option key={x} value={(x + 1) * 0.5}>
+                                            {(x + 1) * 0.5}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button
+                                type="submit"
+                                className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                            >
+                                Save
+                            </button>
+                        </form>
+                        <button
+                            onClick={() => setEditingReview(null)}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                        >
+                            ✕
+                        </button>
                     </div>
                 </div>
             )}
+
 
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Reviews</h1>
