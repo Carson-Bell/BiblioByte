@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import BookPageHeader from "./BookPageHeader.js";
 import Review from "./Review.jsx";
 import Listing from "./Listing.jsx";
+import SignupModal from '../components/SignupModal';
 
 import React, { useState, useEffect } from "react";
 
@@ -20,6 +21,8 @@ export default function BookPageClient({book, reviews, finds}) {
         ).toFixed(1)
         : '—';
     const [isOnWatchlist, setIsOnWatchlist] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [showSignupModal, setShowSignupModal] = useState(false);
 
     const handleToggleWatchlist = async (bookId) => {
         try {
@@ -65,6 +68,22 @@ export default function BookPageClient({book, reviews, finds}) {
         checkWatchlist();
     }, [book._id]);
 
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                const res = await fetch('/api/auth/status', {
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                setIsAuthenticated(data.authenticated);
+            } catch (err) {
+                console.error("Failed to check auth:", err);
+                setIsAuthenticated(false);
+            }
+        };
+        checkAuthStatus();
+    }, []);
+
     return (
         <>
             <div className="flex flex-col min-h-screen">
@@ -105,7 +124,13 @@ export default function BookPageClient({book, reviews, finds}) {
                 <section className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
                     <h2 id="reviews" className="text-3xl font-bold text-white mb-2">Reviews</h2>
                     <button
-                        onClick={() => setShowReview(true)}
+                        onClick={() => {
+                            if (isAuthenticated) {
+                                setShowReview(true);
+                            } else {
+                                setShowSignupModal(true);
+                            }
+                        }}
                         className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                         style={{backgroundColor: 'rgba(11,79,74, 1)', marginBottom: '.5rem'}}
                     >
@@ -146,7 +171,13 @@ export default function BookPageClient({book, reviews, finds}) {
                 <section id="finds" className="w-full bg-gray-250 p-4 sm:p-16 shadow-md">
                     <h2 className="text-3xl font-bold text-white mb-2">Finds</h2>
                     <button
-                        onClick={() => setShowListing(true)}
+                        onClick={() => {
+                            if (isAuthenticated) {
+                                setShowListing(true);
+                            } else {
+                                setShowSignupModal(true);
+                            }
+                        }}
                         className="px-4 py-2 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                         style={{
                             backgroundColor: 'rgba(11,79,74, 1)', marginBottom: '.5rem'
@@ -230,6 +261,8 @@ export default function BookPageClient({book, reviews, finds}) {
                          setFindsState((prevFinds) => [...prevFinds, newFind]);
                      }}
             />
+
+            <SignupModal show={showSignupModal} onClose={() => setShowSignupModal(false)} />
         </>
     );
 }
