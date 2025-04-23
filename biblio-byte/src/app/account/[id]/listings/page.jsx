@@ -39,7 +39,6 @@ function ListingCard({ listing, onDelete, onEdit }) {
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
                 <p style={descriptionStyle}>{description}</p>
-                <span style={viewsStyle}>{views} Views</span>
                 <p>{description}</p>
             </div>
             <div className="buttonContainer" style={buttonContainerStyle}>
