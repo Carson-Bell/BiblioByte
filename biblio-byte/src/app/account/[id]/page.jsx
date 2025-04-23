@@ -158,6 +158,24 @@ export default function Page() {
         fetchProfile();
     }, []);
 
+    useEffect(() => {
+        const styleTag = document.createElement("style");
+        styleTag.innerHTML = `
+        @keyframes l1 {
+            0%  {background-size: 20% 100%, 20% 100%, 20% 100%}
+            33% {background-size: 20% 10%, 20% 100%, 20% 100%}
+            50% {background-size: 20% 100%, 20% 10%, 20% 100%}
+            66% {background-size: 20% 100%, 20% 100%, 20% 10%}
+            100% {background-size: 20% 100%, 20% 100%, 20% 100%}
+        }
+    `;
+        document.head.appendChild(styleTag);
+
+        return () => {
+            document.head.removeChild(styleTag);
+        };
+    }, []);
+
 
     return (
         <>
@@ -181,31 +199,11 @@ export default function Page() {
                         }}
                     />
 
-                    {/* BRI CAN YOU STYLE THIS*/}
                     {uploading && (
-                        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/40 z-50">
-                            <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center">
-                                <svg
-                                    className="animate-spin h-8 w-8 text-teal-700 mb-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                    ></circle>
-                                    <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                                    ></path>
-                                </svg>
-                                <p className="text-lg font-semibold text-gray-700">Uploading...</p>
+                        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
+                            <div className="p-8 rounded-2xl shadow-xl flex flex-col items-center" style={{ backgroundColor: 'rgba(11,79,74, 1)' }}>
+                                <div style={loaderStyle}></div>  {/* Custom Loader */}
+                                <p className="text-lg font-semibold text-white" style={{ marginTop: '17px' }}>Uploading...</p>
                             </div>
                         </div>
                     )}
@@ -350,3 +348,17 @@ const errorTextStyle = {
     fontSize: '12px',
     marginTop: '5px',
 };
+
+const loaderStyle = {
+    width: '45px',
+    aspectRatio: '1',
+    '--c': 'no-repeat linear-gradient(#fff 0 0)',
+    background: `
+        var(--c) 0%   50%,
+        var(--c) 50%  50%,
+        var(--c) 100% 50%
+    `,
+    backgroundSize: '20% 100%',
+    animation: 'l1 1s infinite linear'
+};
+

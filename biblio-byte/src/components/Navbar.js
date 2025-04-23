@@ -103,10 +103,6 @@ export default function Navbar() {
         }
     };
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -126,6 +122,24 @@ export default function Navbar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [dropdownOpen]);
+
+    useEffect(() => {
+        const styleTag = document.createElement("style");
+        styleTag.innerHTML = `
+        @keyframes l1 {
+            0%  {background-size: 20% 100%, 20% 100%, 20% 100%}
+            33% {background-size: 20% 10%, 20% 100%, 20% 100%}
+            50% {background-size: 20% 100%, 20% 10%, 20% 100%}
+            66% {background-size: 20% 100%, 20% 100%, 20% 10%}
+            100% {background-size: 20% 100%, 20% 100%, 20% 100%}
+        }
+    `;
+        document.head.appendChild(styleTag);
+
+        return () => {
+            document.head.removeChild(styleTag);
+        };
+    }, []);
 
     return (
         <>
@@ -156,10 +170,15 @@ export default function Navbar() {
                     {authenticated ? (
                         // profile dropdown
                         <>
-                            <span className="text-white text-xl ml-2">
-                                    Welcome, {user?.fullName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}!
-                                </span>
-                            <div onClick={toggleDropdown} className="relative z-50">
+            <span className="text-white text-xl ml-2">
+                Welcome, {user?.fullName}!
+            </span>
+                            <div
+                                onMouseEnter={() => setDropdownOpen(true)}  // Open on hover
+                                onMouseLeave={() => setDropdownOpen(false)} // Close when hover ends
+                                className="relative z-50"
+                            >
+                                {/* Profile Image */}
                                 {user?.profilePic ? (
                                     <img
                                         src={user.profilePic}
@@ -177,26 +196,24 @@ export default function Navbar() {
                                     <p>Profile</p> // fallback if user hasn’t loaded yet
                                 )}
 
-
+                                {/* Dropdown Menu */}
                                 {loggingOut && (
-                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/10 z-50">
-                                        <div className="px-8 py-6 rounded-lg shadow-lg text-center" style={{ backgroundColor: 'rgba(11,79,74,1)'}}>
-                                            <p className="text-lg font-semibold text-white">Logging you out...</p>
+                                    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
+                                        <div className="p-8 rounded-2xl shadow-xl flex flex-col items-center" style={{ backgroundColor: 'rgba(11,79,74, 1)' }}>
+                                            <div style={loaderStyle}></div>  {/* Custom Loader */}
+                                            <p className="text-lg font-semibold text-white" style={{ marginTop: '17px' }}>Logging you out...</p>
                                         </div>
                                     </div>
                                 )}
 
                                 {dropdownOpen && (
-                                    <div onClick={toggleDropdown} className="relative z-50" ref={dropdownRef}>
-                                        <div className="absolute right-0 w-48 bg-white shadow-lg rounded-lg py-2 mt-2">
-                                            <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
-                                            <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
-                                            <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
-                                            <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
-                                        </div>
+                                    <div className="absolute right-0 mt-0 w-48 bg-white shadow-lg rounded-lg py-2">
+                                        <Link href={`/account/${user?._id}`} className="block px-4 py-2 text-black hover:bg-gray-200">Profile</Link>
+                                        <Link href={`/account/${user?._id}/list`} className="block px-4 py-2 text-black hover:bg-gray-200">My List</Link>
+                                        <Link href={`/account/${user?._id}/listings`} className="block px-4 py-2 text-black hover:bg-gray-200">My Reviews/Documents</Link>
+                                        <button onClick={handleSignOut} className="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Sign Out</button>
                                     </div>
                                 )}
-
                             </div>
                         </>
                     ) : (
@@ -217,6 +234,7 @@ export default function Navbar() {
                         </>
                     )}
                 </div>
+
             </header>
 
             <LoginModal show={showLogin} onClose={() => setShowLogin(false)} />
@@ -224,3 +242,16 @@ export default function Navbar() {
         </>
     );
 }
+
+const loaderStyle = {
+    width: '45px',
+    aspectRatio: '1',
+    '--c': 'no-repeat linear-gradient(#fff 0 0)',
+    background: `
+        var(--c) 0%   50%,
+        var(--c) 50%  50%,
+        var(--c) 100% 50%
+    `,
+    backgroundSize: '20% 100%',
+    animation: 'l1 1s infinite linear'
+};

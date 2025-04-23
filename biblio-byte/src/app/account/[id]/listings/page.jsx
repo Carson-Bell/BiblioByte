@@ -13,10 +13,10 @@ function Review({ review, onDelete, onEdit }) {
             <div style={scoreStyle}>{score}</div>
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
-                <p>{content}</p>
+                <p style={descriptionStyle}>{content}</p>
                 <span style={userInfoStyle}>{user} - {school}</span>
             </div>
-            <div className="buttonContainer" style={buttonContainerStyle}>
+            <div style={buttonContainerStyle}>
                 <button onClick={() => onEdit(review)} style={editButtonStyle}>
                     <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
@@ -38,6 +38,8 @@ function ListingCard({ listing, onDelete, onEdit }) {
         <div style={listingCardStyle}>
             <div style={reviewContentStyle}>
                 <h3 style={titleStyle}>{title}</h3>
+                <p style={descriptionStyle}>{description}</p>
+                <span style={viewsStyle}>{views} Views</span>
                 <p>{description}</p>
             </div>
             <div className="buttonContainer" style={buttonContainerStyle}>
@@ -109,7 +111,6 @@ function Page() {
         }
     };
 
-
     const handleDeleteListing = async (listing) => {
         if (!listing.bookId || !listing.id) {
             alert('Invalid listing');
@@ -165,6 +166,7 @@ function Page() {
     };
 
 
+
     return (
         <div style={pageStyle}>
             {editingReview && (   // PART OF EDIT REVIEW DISPLAY
@@ -202,25 +204,39 @@ function Page() {
 
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Reviews</h1>
-                {reviews.map(review =>
+                {reviews.length === 0 ? (
+                    <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                        <p className="text-2xl text-gray-200 mb-2">No Reviews</p>
+                        <p className="text-md text-gray-400 italic font-light">Post some reviews and come back later!</p>
+                    </div>
+                ) : (
+                reviews.map(review => (
                     <Review
                         key={review.id}
                         review={review}
                         onDelete={() => handleDeleteReview(review)}
                         onEdit={handleEditReview}
                     />
-                )}
+                ))
+                    )}
 
             </div>
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Documents</h1>
-                    {listings.map(listing =>
+                {listings.length === 0 ? (
+                    <div className="mt-6 p-6 rounded-2xl border border-gray-600/20 text-center shadow-sm backdrop-blur-xl max-w-xl mx-auto bg-stone-800/30">
+                        <p className="text-2xl text-gray-200 mb-2">No Documents</p>
+                        <p className="text-md text-gray-400 italic font-light">Upload some files and links and come back later!</p>
+                    </div>
+                ) : (
+                    listings.map(listing => (
                         <ListingCard
                             key={listing.id}
                             listing={listing}
                             onDelete={handleDeleteListing}
                         />
-                    )}
+                    ))
+                )}
             </div>
         </div>
     );
@@ -248,18 +264,23 @@ const reviewCardStyle = {
     padding: '15px',
     borderRadius: '5px',
     marginBottom: '10px',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'space-between',
 };
 
 const scoreStyle = {
     fontSize: '24px',
     fontWeight: 'bold',
     color: '#333',
-    marginRight: '20px'
+    marginRight: '20px',
+    flex: '0 0 auto',
 };
 
 const reviewContentStyle = {
-    flex: '1'
+    flex: '1',
+    wordWrap: 'break-word',
+    whiteSpace: 'normal',
+    overflow: 'hidden',
 };
 
 const userInfoStyle = {
@@ -275,24 +296,33 @@ const listingCardStyle = {
     padding: '15px',
     borderRadius: '5px',
     marginBottom: '10px',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'space-between',
 };
 
 const titleStyle = {
     fontWeight: 'bold',
-    marginBottom: '5px'
+    marginBottom: '5px',
+    fontSize: '1rem',
+    color: 'black',
+    whiteSpace: 'normal',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
 };
 
 const viewsStyle = {
     fontSize: '14px',
-    color: '#666'
+    color: '#666',
+    marginTop: '5px',
 };
 
 const buttonContainerStyle = {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-end',
+    gap: '10px',
     alignItems: 'center',
-    gap: '5px',
+    marginTop: '10px',
 };
 
 const editButtonStyle = {
@@ -319,6 +349,14 @@ const penIconStyle = {
     width: '20px',
     height: '20px',
     color: 'white',
+};
+
+const descriptionStyle = {
+    fontSize: '14px',
+    color: '#666',
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+    overflow: 'hidden',
 };
 
 {/* HERE'S THE EDIT STYLING PLEASE FIX IT*/}
