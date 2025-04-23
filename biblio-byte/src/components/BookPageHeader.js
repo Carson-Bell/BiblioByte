@@ -1,17 +1,35 @@
 'use client';
 //TEST CHANGE FROM BRIANNA
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function BookPageHeader() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Set mobile breakpoint
+        };
+
+        // Initial check
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <>
-            <nav className="w-full text-white py-2 px-4 fixed top-[68px] z-30 shadow-lg"
+            <nav className={`w-full text-white py-2 px-4 fixed z-30 shadow-lg ${
+                    isMobile ? "top-[54px]" : "top-[68px]"
+                }`}
                 style={{
-                backgroundColor: 'oklch(27.7% 0.046 192.524)',
-                border: '2px solid transparent',
-                boxShadow: '0 0 10px rgba(0, 0, 0, 1)'  // Creates a blurry effect around the border
+                    backgroundColor: 'oklch(27.7% 0.046 192.524)',
+                    border: '2-x solid transparent',
+                    boxShadow: '0 0 10px rgba(0, 0, 0, 1)'
             }}>
-            <ul className="list-none grid grid-cols-3 gap-3 text-center">
+                <ul className="list-none grid grid-cols-3 gap-3 text-center">
                     <li>
                         <a href="#info" className="hover:underline">
                             Info

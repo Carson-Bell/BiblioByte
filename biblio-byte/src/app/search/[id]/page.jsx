@@ -37,5 +37,6 @@ export default async function Page({params}) {
                             reviews={book.reviews || []}
                             finds={book.finds || []} />
         </>
+
     );
 }

@@ -1,14 +1,14 @@
 // SPLASH PAGE
 'use client';
 // pages/index.js
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-
+import Link from 'next/link';
 
 export default function Home() {
+    const [isMobile, setIsMobile] = useState(false);
+    const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
     const [searchTerm, setSearchTerm] = useState('');
     const [searchType, setSearchType] = useState('Textbook');
     const router = useRouter();
@@ -22,16 +22,88 @@ export default function Home() {
         router.push(`/search?term=${encodeURIComponent(searchTerm)}&type=${searchType}`);
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            const isNowMobile = window.innerWidth <= 768;
+            setIsMobile(isNowMobile);
+
+            // Show popup when switching to mobile
+            if (isNowMobile) {
+                setShowPopup(true);
+            }
+        };
+
+        // Initial check
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const closePopup = () => {
+        setShowPopup(false); // Close the popup
+    };
+
+    if (isMobile) {
+        // Render mobile-specific layout
+        return (
+            <>
+                <Head>
+                    <title >BiblioByte - Mobile</title>
+                </Head>
+                <div style={backgroundStyle}>
+
+                {showPopup && (
+                    <div style={popupStyle}>
+                        <div style={popupContentStyle}>
+                            <h1 className="text-4xl font-bold text-gray-800" style={{ fontSize: isMobile ? '24px' : '32px' }}>
+                              Welcome to BiblioByte!
+                         </h1>
+                     <p className="text-gray-600" style={{ fontSize: isMobile ? '14px' : '18px' }}>
+                               BiblioByte is a resource for students to write and read reviews about the quality of their class textbook and determine if it's worth purchasing for their class.
+                     </p>
+                     <p className="text-gray-600" style={{ fontSize: isMobile ? '14px' : '18px' }}>
+                              Don't see the textbook you're looking for? Create an account to add textbooks to BiblioByte and to leave reviews over textbooks you have read.
+                     </p>
+                            <button onClick={closePopup} style={popupButtonStyle}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                    <div style={cardStyle}>
+                        <h1 className="text-3xl font-semibold hover:font-bold text-white" style = {headerStyle}>BiblioByte</h1>
+                        <p className="text-white" style={descriptionStyle}>Search for Textbooks!</p>
+                        <form onSubmit={handleSearch} style={mobileFormStyle}>
+                            <input className='text-white'
+                                type="text"
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                style={mobileInputStyle}
+                            />
+                            <button type="submit" style={buttonStyle}>Search</button>
+                        </form>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    // Render desktop layout
     return (
         <>
             <Head>
                 <title>BiblioByte</title>
             </Head>
             <div style={backgroundStyle}>
-                <div style={columnsStyle}>
+                <div style={columnsStyle(isMobile)}>
                     {/* Left Column */}
-                    <div style={leftColumnStyle}>
-                    </div>
+                    <div style={leftColumnStyle}></div>
 
                     {/* Center Column: BiblioByte Card */}
                     <div style={cardStyle}>
@@ -39,18 +111,9 @@ export default function Home() {
                             BiblioByte
                         </div>
                         <div className="text-white" style={descriptionStyle}>
-                            <p>Search for a textbook, class, or school!</p>
+                            <p>Search for a Textbook!</p>
                         </div>
                         <form onSubmit={handleSearch} style={formStyle}>
-                            <select className='text-white'
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                style={selectStyle}
-                            >
-                                <option value="Textbook" className='text-black'>Textbook</option>
-                                <option value="Class" className='text-black'>Class</option>
-                                <option value="School" className='text-black'>School</option>
-                            </select>
                             <input className='text-white'
                                 type="text"
                                 placeholder="Search..."
@@ -65,21 +128,22 @@ export default function Home() {
 
                     {/* Right Column */}
                     <div style={rightColumnStyle}>
-                        <h1 className="text-4xl font-bold text-gray-800">Welcome to BiblioByte!</h1>
-                        <p className="text-gray-600 text-xl">
-                             BiblioByte is a resource for students to write and read reviews about the quality of their class textbook and determine if it's worth purchasing for their class.
-                            BiblioByte can also be used as a platform for students to find places to purchase the textbooks needed for their classes.
-                        </p>
-                    <br />
-                        <p className="text-gray-600 text-xl">
-                        Don't see the textbook your looking for? Create an account to add textbooks to BiblioByte and to leave reviews over textbooks you have read.
-                        </p>
+                         <h1 className="text-4xl font-bold text-gray-800" style={{ fontSize: isMobile ? '24px' : '32px' }}>
+                              Welcome to BiblioByte!
+                         </h1>
+                     <p className="text-gray-600" style={{ fontSize: isMobile ? '14px' : '18px' }}>
+                               BiblioByte is a resource for students to write and read reviews about the quality of their class textbook and determine if it's worth purchasing for their class.
+                     </p>
+                     <p className="text-gray-600" style={{ fontSize: isMobile ? '14px' : '18px' }}>
+                              Don't see the textbook you're looking for? Create an account to add textbooks to BiblioByte and to leave reviews over textbooks you have read.
+                     </p>
                     </div>
                 </div>
             </div>
         </>
     );
 }
+
 const backgroundStyle = {
     position: 'fixed',
     top: 0,
@@ -94,15 +158,16 @@ const backgroundStyle = {
     zIndex: -1 // Ensures the background stays behind the card
 };
 
-const columnsStyle = {
+const columnsStyle = (isMobile) => ({
   display: 'flex', // Flexbox layout for columns
+  flexDirection: isMobile ? 'column' : 'row', // Stack as rows on mobile, columns otherwise
   justifyContent: 'space-between', // Space between columns
   alignItems: 'center', // Align items vertically
   width: '90%', // Ensure the container is responsive
   maxWidth: '1200px', // Limit the maximum width
   margin: '0 auto', // Center the container horizontally
   gap: '20px', // Add space between columns
-};
+});
 
 const leftColumnStyle = {
   flex: 1,
@@ -123,7 +188,7 @@ const cardStyle = {
   width: '100%', // Make it responsive for smaller screens
 };
 
-const rightColumnStyle = {
+const rightColumnStyle =  {
   flex: 1, // Take up equal space
   textAlign: 'center', // Center text horizontally
   display: 'flex', // Use flexbox for centering
@@ -165,6 +230,8 @@ const selectStyle = {
     marginRight: '10px',
     border: '2px solid #022f2e',
     borderRadius: '5px',
+    justifyContent: 'center',
+    alignItems: 'center',
     cursor: 'pointer'
 };
 
@@ -185,4 +252,49 @@ const buttonStyle = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer'
+};
+
+const mobileFormStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    
+};
+
+const mobileInputStyle = {
+    padding: '10px',
+    borderRadius: '5px',
+    border: '2px solid #022f2e',
+    width: '100%',
+};
+
+const popupStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000, // Ensure it appears above other elements
+};
+
+const popupContentStyle = {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: '20px',
+    borderRadius: '10px',
+    textAlign: 'center',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
+const popupButtonStyle = {
+    marginTop: '10px',
+    padding: '10px 20px',
+    backgroundColor: '#0b4f4a',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
 };
