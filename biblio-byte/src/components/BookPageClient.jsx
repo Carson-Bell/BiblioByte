@@ -50,21 +50,21 @@ export default function BookPageClient({book, reviews, finds}) {
         }
     };
 
-    useEffect(() => {
-        const checkWatchlist = async () => {
-            try {
-                const res = await fetch('/api/users/me', { credentials: 'include' });
-                if (res.ok) {
-                    const data = await res.json();
-                    const watchlist = data.watchlist || [];
-                    const isBookInWatchlist = watchlist.some((entry) => entry.book?.toString() === book._id.toString());
-                    setIsOnWatchlist(isBookInWatchlist);
-                }
-            } catch (err) {
-                console.error('Failed to check watchlist:', err);
+    const checkWatchlist = async () => {
+        try {
+            const res = await fetch('/api/users/me', { credentials: 'include' });
+            if (res.ok) {
+                const data = await res.json();
+                const watchlist = data.watchlist || [];
+                const isBookInWatchlist = watchlist.some((entry) => entry.book?.toString() === book._id.toString());
+                setIsOnWatchlist(isBookInWatchlist);
             }
-        };
+        } catch (err) {
+            console.error('Failed to check watchlist:', err);
+        }
+    };
 
+    useEffect(() => {
         checkWatchlist();
     }, [book._id]);
 
@@ -107,7 +107,13 @@ export default function BookPageClient({book, reviews, finds}) {
                         </h3>
                         <a>
                             <button
-                                onClick={() => handleToggleWatchlist(book._id)}
+                                onClick={() => {
+                                    if (isAuthenticated) {
+                                        handleToggleWatchlist(book._id);
+                                    } else {
+                                        setShowSignupModal(true);
+                                    }
+                                }}
                                 className="px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                                 style={{backgroundColor: 'rgba(11,79,74, 1)'}}
                             >
