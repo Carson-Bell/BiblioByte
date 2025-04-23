@@ -134,7 +134,13 @@ function Page() {
     };
 
     const handleEditReview = (review) => {
-        setEditingReview(review);
+        setEditingReview({
+            id: review.id,
+            bookId: review.bookId,
+            title: review.title || '',
+            content: review.content || '',
+            score: review.score || 1,
+        });
     };
 
     const saveEditedReview = async () => {
@@ -180,7 +186,10 @@ function Page() {
                         <h2 className="text-lg font-semibold mb-4 text-black">Edit Review</h2>
                         <form
                             className="flex flex-col gap-3"
-                            onSubmit={saveEditedReview}
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                saveEditedReview();
+                            }}
                         >
                             <div>
                                 <label className="block font-semibold mb-2">Title</label>

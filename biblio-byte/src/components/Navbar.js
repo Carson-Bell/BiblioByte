@@ -96,7 +96,7 @@ export default function Navbar() {
             if (res.ok) {
                 setAuthenticated(false);
                 setUserProfile(null);
-                window.location.href = '/';
+                router.push('/');
             }
         } catch (error) {
             console.error('Error signing out:', error);
