@@ -120,7 +120,7 @@ export default function BookPageClient({book, reviews, finds}) {
                                         <div className="flex items-center gap-4">
                                             <h3 className="text-3xl font-semibold text-black">{review.rating || '—'}</h3>
                                             <div>
-                                                <h2 className="text-lg font-bold text-gray-800">Review</h2>
+                                                <h2 className="text-lg font-bold text-gray-800">{review.title || 'Review'}</h2>
                                                 <p className="text-sm font-bold text-gray-700">{review.name || 'User'}</p>
                                                 <p className="text-sm text-gray-600">
                                                     {review.comment || 'No comment'}
@@ -214,11 +214,13 @@ export default function BookPageClient({book, reviews, finds}) {
                 bookId={book._id.toString()}
                 onReviewAdded={(newReview) => {
                     const formattedReview = {
-                        _id: newReview._id,
-                        name: newReview.name,
-                        comment: newReview.comment,
-                        rating: newReview.rating,
+                        _id: newReview.id || newReview._id,
+                        name: newReview.user || newReview.name,
+                        comment: newReview.content || newReview.comment,
+                        rating: newReview.score || newReview.rating,
+                        title: newReview.title || 'Review',
                     };
+                    console.log("Formatted review being added to state:", formattedReview);
                     setReviewsState((prev) => [...prev, formattedReview]);
                 }}
             />

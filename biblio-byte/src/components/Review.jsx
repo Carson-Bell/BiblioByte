@@ -55,17 +55,31 @@ export default function Review({ show, onClose, bookId, onReviewAdded }) {
             });
 
             const responseData = await response.json();
+            console.log("🧾 Full responseData from POST /api/reviews:", responseData);
 
             if (response.ok) {
-                const createdReview = await response.json();
                 if (onReviewAdded) {
+                    console.log("📤 Sending to onReviewAdded:", {
+                        id: responseData.id,
+                        title: responseData.title,
+                        content: responseData.content,
+                        score: responseData.score,
+                        user: responseData.user,
+                        school: responseData.school,
+                        bookId: responseData.bookId,
+                    });
+
                     onReviewAdded({
-                        _id: createdReview._id,
-                        name: createdReview.name,
-                        rating: createdReview.rating,
-                        comment: createdReview.comment
+                        id: responseData.id,
+                        title: responseData.title,
+                        content: responseData.content,
+                        score: responseData.score,
+                        user: responseData.user,
+                        school: responseData.school,
+                        bookId: responseData.bookId,
                     });
                 }
+
                 alert("Review added successfully!");
 
                 setFormData({

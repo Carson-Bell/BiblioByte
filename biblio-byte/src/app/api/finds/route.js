@@ -78,7 +78,6 @@ export async function DELETE(req) {
             return new Response(JSON.stringify({ message: 'Book not found' }), { status: 404 });
         }
 
-        // Remove the find
         book.finds = book.finds.filter(find => find._id.toString() !== findId);
 
         await book.save();

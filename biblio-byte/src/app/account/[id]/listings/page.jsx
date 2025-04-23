@@ -24,7 +24,7 @@ function Review({ review, onDelete, onEdit }) {
                         style={penIconStyle}
                     />
                 </button>
-                <button onClick={() => onDelete(id)} style={deleteButtonStyle}>X</button>
+                <button onClick={() => onDelete(review)} style={deleteButtonStyle}>X</button>
             </div>
         </div>
     );
@@ -41,13 +41,6 @@ function ListingCard({ listing, onDelete, onEdit }) {
                 <p>{description}</p>
             </div>
             <div className="buttonContainer" style={buttonContainerStyle}>
-                <button onClick={() => onEdit(listing)} style={editButtonStyle}>
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwnjF5hGaySHesqZtZ3HWVo3uuqMGj3QOYIw&s"
-                        alt="Edit"
-                        style={penIconStyle}
-                    />
-                </button>
                 <button onClick={() => onDelete(listing)} style={deleteButtonStyle}>X</button>
             </div>
         </div>
@@ -59,6 +52,7 @@ function ListingCard({ listing, onDelete, onEdit }) {
 function Page() {
     const [reviews, setReviews] = useState([]);
     const [listings, setListings] = useState([]);
+    const [editingReview, setEditingReview] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -85,9 +79,36 @@ function Page() {
         fetchData();
     }, []);
 
-    const handleDeleteReview = async (id) => {
-        alert('placeholder');
+    const handleDeleteReview = async (review) => {
+        console.log("Review passed to delete handler:", review);
+
+        console.log("Trying to delete review:", review);
+
+        if (!review.bookId || !review.id) {
+            console.error("Invalid review detected:", review);
+            alert('Invalid review');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/reviews', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bookId: review.bookId,
+                    reviewId: review.id
+                })
+            });
+
+            if (!res.ok) throw new Error('Failed to delete review');
+
+            setReviews(prev => prev.filter(r => r.id !== review.id));
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete review');
+        }
     };
+
 
     const handleDeleteListing = async (listing) => {
         if (!listing.bookId || !listing.id) {
@@ -113,26 +134,79 @@ function Page() {
     };
 
     const handleEditReview = (review) => {
-        // Add your modal logic or inline editing form here
-        alert(`Open review edit modal for: ${review.title}`);
+        setEditingReview(review);
     };
 
-    const handleEditListing = (listing) => {
-        // Add your modal logic or inline editing form here
-        alert(`Open listing edit modal for: ${listing.title}`);
-    };
+    const saveEditedReview = async () => {
+        try {
+            const res = await fetch('/api/reviews', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bookId: editingReview.bookId,
+                    reviewId: editingReview.id,
+                    title: editingReview.title,
+                    description: editingReview.content,
+                    rating: editingReview.score,
+                }),
+            });
 
+            if (!res.ok) throw new Error('Failed to update review');
+            const { updatedReview } = await res.json();
+
+            setReviews((prev) =>
+                prev.map((r) => (r.id === updatedReview.id ? updatedReview : r))
+            );
+            setEditingReview(null);
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update review');
+        }
+    };
 
 
     return (
         <div style={pageStyle}>
+            {editingReview && (   // PART OF EDIT REVIEW DISPLAY
+                <div style={modalOverlayStyle}>
+                    <div style={modalContentStyle}>
+                        <h2>Edit Review</h2>
+                        <input
+                            type="text"
+                            value={editingReview.title}
+                            onChange={(e) =>
+                                setEditingReview({ ...editingReview, title: e.target.value })
+                            }
+                        />
+                        <textarea
+                            value={editingReview.content}
+                            onChange={(e) =>
+                                setEditingReview({ ...editingReview, content: e.target.value })
+                            }
+                        />
+                        <input
+                            type="number"
+                            value={editingReview.score}
+                            min="0.5"
+                            max="5"
+                            step="0.5"
+                            onChange={(e) =>
+                                setEditingReview({ ...editingReview, score: parseFloat(e.target.value) })
+                            }
+                        />
+                        <button onClick={saveEditedReview}>Save</button>
+                        <button onClick={() => setEditingReview(null)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
             <div style={sectionStyle}>
                 <h1 className="text-3xl font-bold text-white mb-2">Reviews</h1>
                 {reviews.map(review =>
                     <Review
                         key={review.id}
                         review={review}
-                        onDelete={handleDeleteReview}
+                        onDelete={() => handleDeleteReview(review)}
                         onEdit={handleEditReview}
                     />
                 )}
@@ -145,7 +219,6 @@ function Page() {
                             key={listing.id}
                             listing={listing}
                             onDelete={handleDeleteListing}
-                            onEdit={handleEditListing}
                         />
                     )}
             </div>
@@ -248,5 +321,26 @@ const penIconStyle = {
     color: 'white',
 };
 
+{/* HERE'S THE EDIT STYLING PLEASE FIX IT*/}
+const modalOverlayStyle = {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+};
+
+const modalContentStyle = {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '90%',
+    maxWidth: '400px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+};
 
 export default Page;

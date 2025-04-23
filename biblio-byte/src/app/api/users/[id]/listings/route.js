@@ -35,7 +35,8 @@ export async function GET(req, { params }) {
                             title: review.title,
                             content: review.comment,
                             user: review.name,
-                            school: user.university
+                            school: user.university,
+                            bookId: book._id,
                         });
                     }
                 });
