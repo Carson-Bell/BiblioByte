@@ -150,7 +150,7 @@ export default function BookPageClient({book, reviews, finds}) {
                         className="px-4 py-2 text-white rounded-md hover:bg-zinc-300 hover:text-black focus:outline-none"
                         style={{
                             backgroundColor: 'rgba(11,79,74, 1)', marginBottom: '.5rem'
-                        }} // Replace with your custom RGB color
+                        }}
                     >
                         Add Find
                     </button>
